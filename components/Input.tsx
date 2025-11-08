@@ -8,10 +8,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type
   return (
     <input
       type={type}
-      className={`flex h-10 w-full rounded-[4px] border border-[#3a3846] bg-[#24232d] px-3 py-2 text-sm text-white placeholder:text-[#8d8c9e]
-      transition-colors
-      hover:bg-[#2b2a34] hover:border-[#2e2d36]
-      focus:outline-none focus:ring-2 focus:ring-[#1ed760] focus:border-transparent
+      className={`flex h-10 w-full rounded-[4px] border border-[#333333] bg-[#1A1A1A] px-3 py-2 text-sm text-white placeholder:text-[#666666] font-mono
+      transition-all duration-200
+      hover:bg-[#222222] hover:border-[#444444]
+      focus:outline-none focus:border-b-2 focus:border-[#00FFC0] focus:bg-[#0c0c0c] focus:shadow-[0_4px_20px_-5px_rgba(0,255,192,0.3)]
       disabled:cursor-not-allowed disabled:opacity-50
       ${className}`}
       ref={ref}

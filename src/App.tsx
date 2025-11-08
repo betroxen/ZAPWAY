@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AppContext, AppContextType } from './context/AppContext';
 import { ToastProvider } from './context/ToastContext';
@@ -116,7 +117,7 @@ const App = () => {
       case 'Casino Directory': return <CasinoDirectoryPage setViewingCasinoId={setViewingCasinoId} />;
       case 'Bonus Offers': return <BonusOffersPage setViewingCasinoId={setViewingCasinoId} />;
       case 'Profile': return <ProfilePage />;
-      case 'Command Console': return <SettingsPage />;
+      case 'Settings': return <SettingsPage />;
       case 'Support': return <SupportPage />;
       case 'FAQ': return <FAQPage />;
       case 'Terms of Service': return <TermsOfServicePage />;
@@ -147,7 +148,7 @@ const App = () => {
     <AppContext.Provider value={appContextValue}>
       <ToastProvider>
         <GlobalStyles />
-        <div className={`min-h-screen w-full bg-[#121212] text-[#FAFBFF] ${(isAuthModalOpen || isReviewModalOpen || isMobileNavOpen) ? 'modal-open' : ''}`}>
+        <div className={`min-h-screen w-full bg-[#0A0A0A] text-[#FAFBFF] ${(isAuthModalOpen || isReviewModalOpen) ? 'modal-open' : ''}`}>
           
           {/* AUTH MODAL - Always available to be triggered */}
           <AuthModal
@@ -159,7 +160,7 @@ const App = () => {
 
           {!isLoggedIn ? (
             // === PUBLIC LANDING LAYOUT ===
-            <div className="flex flex-col min-h-screen animate-fadeIn bg-[#121212]">
+            <div className="flex flex-col min-h-screen animate-fadeIn">
                  <Header 
                     onOpenLogin={handleOpenLogin} 
                     onOpenRegister={handleOpenRegister} 
@@ -175,7 +176,7 @@ const App = () => {
             </div>
           ) : (
             // === AUTHENTICATED APP LAYOUT ===
-            <div className="flex min-h-screen animate-fadeIn bg-[#121212]">
+            <div className="flex min-h-screen animate-fadeIn bg-[#0A0A0A]">
                <Sidebar 
                     isCollapsed={isSidebarCollapsed} 
                     setIsCollapsed={setIsSidebarCollapsed}
@@ -194,7 +195,7 @@ const App = () => {
                         onToggleMobileNav={() => setIsMobileNavOpen(!isMobileNavOpen)}
                     />
                     
-                    <main className="flex-1 overflow-x-hidden bg-[#121212]">
+                    <main className="flex-1 overflow-x-hidden">
                         {renderContent()}
                     </main>
 

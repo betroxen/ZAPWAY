@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import { Icons } from '../components/icons';
 import { AppContext } from '../context/AppContext';
@@ -31,17 +30,21 @@ export const Footer = () => {
           </div>
           <div>
             <h3 className="font-heading mb-4 text-sm font-semibold uppercase text-[#8d8c9e]">Platform</h3>
-            <ul className="space-y-3">
-              <li><button onClick={() => handleLinkClick('About Us')} className="text-white hover:text-[#1ed760]">About Us</button></li>
-              <li><button onClick={() => handleLinkClick('Our Mission')} className="text-white hover:text-[#1ed760]">Our Mission</button></li>
-              <li><button onClick={() => handleLinkClick('Affiliate')} className="text-white hover:text-[#1ed760]">Partner With Us</button></li>
+            <ul className="space-y-3 text-sm">
+              <li><button onClick={() => handleLinkClick('About Us')} className="text-white hover:text-[#1ed760] text-left">About Us</button></li>
+              <li><button onClick={() => handleLinkClick('Knowledge Base')} className="text-white hover:text-[#1ed760] text-left">Knowledge Base</button></li>
+              <li><button onClick={() => handleLinkClick('Review Methodology')} className="text-white hover:text-[#1ed760] text-left">Methodology</button></li>
+              <li><button onClick={() => handleLinkClick('Affiliate')} className="text-white hover:text-[#1ed760] text-left">Partner With Us</button></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-heading mb-4 text-sm font-semibold uppercase text-[#8d8c9e]">Legal</h3>
-            <ul className="space-y-3">
-              <li><button onClick={() => handleLinkClick('Privacy Policy')} className="text-white hover:text-[#1ed760]">Privacy Policy</button></li>
-              <li><button onClick={() => handleLinkClick('Terms of Service')} className="text-white hover:text-[#1ed760]">Terms of Service</button></li>
+            <h3 className="font-heading mb-4 text-sm font-semibold uppercase text-[#8d8c9e]">Legal & Safety</h3>
+            <ul className="space-y-3 text-sm">
+              <li><button onClick={() => handleLinkClick('Terms of Service')} className="text-white hover:text-[#1ed760] text-left">Terms of Service</button></li>
+              <li><button onClick={() => handleLinkClick('Privacy Policy')} className="text-white hover:text-[#1ed760] text-left">Privacy Policy</button></li>
+              <li><button onClick={() => handleLinkClick('Responsible Gaming')} className="text-white hover:text-[#1ed760] text-left">Responsible Gaming</button></li>
+              <li><button onClick={() => handleLinkClick('Commercial Disclosure')} className="text-white hover:text-[#1ed760] text-left">Commercial Disclosure</button></li>
+               <li><button onClick={() => handleLinkClick('Partner Vetting')} className="text-white hover:text-[#1ed760] text-left">Vetting Policy</button></li>
             </ul>
           </div>
         </div>

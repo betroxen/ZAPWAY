@@ -12,7 +12,7 @@ export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, label, descri
   return (
     <div className="flex items-center justify-between py-3">
         <div className="pr-8">
-            {label && <label className="font-medium text-white block">{label}</label>}
+            {label && <label className="font-medium text-white block font-heading uppercase text-sm">{label}</label>}
             {description && <div className="text-sm text-[#8d8c9e] mt-1">{description}</div>}
         </div>
         <button
@@ -20,8 +20,8 @@ export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, label, descri
             role="switch"
             aria-checked={checked}
             onClick={() => onChange(!checked)}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#1ed760] focus:ring-offset-2 focus:ring-offset-[#000000] ${
-            checked ? 'bg-[#1ed760]' : 'bg-[#3a3846]'
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#00FFC0] focus:ring-offset-2 focus:ring-offset-[#121212] ${
+            checked ? 'bg-[#00FFC0]' : 'bg-[#333333]'
             }`}
         >
             <span className="sr-only">{typeof label === 'string' ? label : 'Toggle'}</span>

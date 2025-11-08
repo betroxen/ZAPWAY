@@ -1,3 +1,4 @@
+
 import { Icons } from '../components/icons';
 import React from 'react';
 
@@ -23,6 +24,6 @@ export const sidebarNavItems = [
   { group: "SUP", items: [
     { title: "Support", href: "#", icon: Icons.HelpCircle as React.FC },
     { title: "FAQ", href: "#", icon: Icons.BookOpen as React.FC },
-    { title: "Settings", href: "#", icon: Icons.Settings as React.FC },
+    { title: "Command Console", href: "#", icon: Icons.Settings as React.FC },
   ]}
 ];

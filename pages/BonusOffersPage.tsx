@@ -1,22 +1,21 @@
-import React from 'react';
-import { mockCasinosData } from '../constants/casinos';
+
+import React, { useMemo } from 'react';
 import { CasinoListPage } from '../components/CasinoListPage';
+import { mockCasinosData } from '../constants/casinos';
 
 export const BonusOffersPage = ({ setViewingCasinoId }: { setViewingCasinoId: (id: string | null) => void; }) => {
-    const bonusCasinos = [...mockCasinosData].sort((a, b) => {
-         const aIsHigh = a.tags.includes('high-bonus');
-         const bIsHigh = b.tags.includes('high-bonus');
-         if (aIsHigh && !bIsHigh) return -1;
-         if (!aIsHigh && bIsHigh) return 1;
-         return b.rating - a.rating; // secondary sort by rating
-    });
+  // Filter for casinos that are tagged with 'high-bonus' or generally have a bonus listed.
+  // For this mock, we'll use those tagged 'high-bonus' as priority.
+  const bonusCasinos = useMemo(() => {
+      return mockCasinosData.filter(c => c.tags.includes('high-bonus'));
+  }, []);
 
-    return (
-        <CasinoListPage
-            title="Exclusive Bonus Offers"
-            subtitle="Unlock the best bonuses in crypto gambling. We've partnered with top casinos to bring you exclusive deals with fair terms."
-            casinos={bonusCasinos}
-            setViewingCasinoId={setViewingCasinoId}
-        />
-    );
+  return (
+    <CasinoListPage
+      title="Active Bonus Operations"
+      subtitle="High-yield opportunities vetted for fair terms. <span class='text-[#1ed760]'>Maximize your initial stack.</span>"
+      casinos={bonusCasinos}
+      setViewingCasinoId={setViewingCasinoId}
+    />
+  );
 };
