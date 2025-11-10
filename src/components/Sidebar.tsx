@@ -24,7 +24,7 @@ const SidebarLink: React.FC<{ href: string; icon: React.FC<any>; children: React
       href={href}
       onClick={onClick}
       className={`group flex items-center gap-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] font-medium relative overflow-hidden
-      ${isCollapsed ? 'justify-center px-2 py-3' : isMobile ? 'px-5 py-4 text-sm font-heading uppercase tracking-wider' : 'px-4 py-3 text-sm'}
+      ${isCollapsed ? 'justify-center px-2 py-3' : isMobile ? 'px-5 py-4 text-sm font-orbitron uppercase tracking-wider' : 'px-4 py-3 text-sm'}
       ${isActive 
         ? 'text-white bg-[#00FFC0]/5' 
         : 'text-[#8d8c9e] hover:bg-[#1A1A1A] hover:text-white'}`}
@@ -77,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                     <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-[#00FFC0] rounded-full border-4 border-[#0c0c0e]"></div>
                 </div>
                 <div>
-                    <div className="font-heading text-white uppercase text-sm tracking-wider">DegenGambler</div>
+                    <div className="font-orbitron text-white uppercase text-sm tracking-wider">DegenGambler</div>
                     <div className="text-[10px] font-mono text-[#00FFC0] flex items-center gap-2 mt-1">
                         <Icons.Shield className="h-3 w-3" /> LVL 42 OPERATOR
                     </div>
@@ -142,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
              <div className="shrink-0 p-4 border-t border-[#333] bg-[#0c0c0e] pb-[calc(1rem+env(safe-area-inset-bottom))]">
                 <Button
                     variant="ghost"
-                    className="w-full font-heading uppercase text-xs tracking-wider text-[#8d8c9e] hover:text-white border border-[#333] hover:bg-[#1A1A1A] h-11"
+                    className="w-full font-orbitron uppercase text-xs tracking-wider text-[#8d8c9e] hover:text-white border border-[#333] hover:bg-[#1A1A1A] h-11"
                     onClick={() => setIsMobileOpen(false)}
                 >
                     <Icons.X className="h-4 w-4 mr-2" /> CLOSE TERMINAL
@@ -212,7 +212,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                 ) : (
                     <>
                         <Icons.ChevronLeft className="h-5 w-5" />
-                        <span className="font-heading uppercase text-xs tracking-wider">COLLAPSE</span>
+                        <span className="font-orbitron uppercase text-xs tracking-wider">COLLAPSE</span>
                     </>
                 )}
             </Button>
