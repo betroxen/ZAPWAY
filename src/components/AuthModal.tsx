@@ -99,7 +99,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTa
 
     setIsLoading(true);
 
-    const url = activeTab === 'login' ? 'http://localhost:3001/login' : 'http://localhost:3001/register';
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const url = activeTab === 'login' ? `${apiUrl}/login` : `${apiUrl}/register`;
     const payload = activeTab === 'login' ? { email, password } : { email, password, username };
 
     try {
