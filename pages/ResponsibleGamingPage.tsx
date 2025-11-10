@@ -5,6 +5,19 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { ToastContext } from '../context/ToastContext';
 
+const SUPPORT_RESOURCES = [
+    { name: "National Council on Problem Gambling (NCPG)", focus: "US & Global Referrals", signal: "1-800-522-4700 (24/7)", info: "ncpgambling.org – Chat/text available; self-assessments." },
+    { name: "GamCare", focus: "UK Advice & Support", signal: "0808 8020 133 (24/7)", info: "gamcare.org.uk – Live chat; counseling and family support." },
+    { name: "Gambling Therapy", focus: "Global Online Forum", signal: "Online Chat (24/7)", info: "gamblingtherapy.org – Multilingual; peer forums, crisis intervention." },
+    { name: "Responsible Gambling Council (RGC)", focus: "Canada Prevention & Help", signal: "1-888-230-3505 (24/7)", info: "responsiblegambling.org – Research-backed recovery plans." },
+    { name: "Gambling Help Online", focus: "Australia Crisis Support", signal: "1800 858 858 (24/7)", info: "gamblinghelponline.org.au – Web chat, financial counseling." },
+    { name: "ConnexOntario", focus: "Ontario, Canada Health Line", signal: "1-866-531-2600 (24/7)", info: "connexontario.ca – Referrals to treatment; mental health integration." },
+    { name: "Gamblers Anonymous", focus: "Global Peer Meetings", signal: "Varies by Location", info: "gamblersanonymous.org – 12-step meetings worldwide; virtual options." },
+    { name: "ADICTEL", focus: "France Addiction Helpline", signal: "09 74 75 13 13 (08:00-02:00)", info: "joueurs-info-service.fr – Specialized therapy referrals." },
+    { name: "Stödlinjen", focus: "Sweden National Line", signal: "020-819100 (Mon-Fri 09-18)", info: "stodlinjen.se – Anonymous advice; self-exclusion guidance." },
+    { name: "BeGambleAware", focus: "UK Safer Gambling", signal: "0808 8020 133 (24/7)", info: "begambleaware.org – Treatment finder; digital blocking tools." },
+];
+
 export const ResponsibleGamingPage = () => {
     const { showToast } = useContext(ToastContext) || { showToast: () => {} };
 
@@ -15,7 +28,7 @@ export const ResponsibleGamingPage = () => {
     };
 
     return (
-        <div className="container mx-auto max-w-6xl p-4 py-10 md:p-12 page-fade-in">
+        <div className="container mx-auto max-w-7xl p-4 py-10 md:p-12 page-fade-in">
             
             {/* HEADER */}
             <div className="mb-12">
@@ -31,7 +44,7 @@ export const ResponsibleGamingPage = () => {
             </div>
 
             {/* INTRO MANIFESTO */}
-            <div className="prose prose-invert max-w-3xl mb-16">
+            <div className="prose prose-invert max-w-4xl mb-16">
                 <p className="text-xl leading-relaxed text-white">
                     <strong className="text-[#00FFC0]">Gamble Smarter, Not Harder.</strong> This philosophy is non-negotiable. The edge is only valuable if you maintain absolute control. The moment the game controls you, you've lost your strategic advantage.
                 </p>
@@ -95,7 +108,6 @@ export const ResponsibleGamingPage = () => {
                 </p>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* DIRECT ACTION */}
                     <div className="space-y-6">
                         <Card className="p-6 bg-red-950/10 border-red-900/50">
                             <h3 className="font-heading text-white uppercase mb-4 flex items-center gap-2">
@@ -123,50 +135,66 @@ export const ResponsibleGamingPage = () => {
                             </Button>
                         </Card>
                     </div>
-
-                    {/* GLOBAL SUPPORT TABLE */}
-                    <Card className="p-0 overflow-hidden bg-[#0c0c0e] border-[#333]">
-                        <div className="p-4 bg-[#14131c] border-b border-[#333]">
-                            <h3 className="font-heading text-white uppercase text-sm">GLOBAL SUPPORT INFRASTRUCTURE</h3>
-                        </div>
-                        <div className="p-4">
-                            <table className="w-full text-sm text-left">
-                                <thead className="text-xs text-[#8d8c9e] font-mono uppercase">
-                                    <tr>
-                                        <th className="pb-3">Resource Name</th>
-                                        <th className="pb-3">Focus</th>
-                                        <th className="pb-3 text-right">Contact Signal</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-[#333]">
-                                    <tr>
-                                        <td className="py-3 text-white font-medium">NCPG</td>
-                                        <td className="py-3 text-[#8d8c9e]">US/Global Support</td>
-                                        <td className="py-3 text-right font-mono text-[#00FFC0]">1-800-522-4700</td>
-                                    </tr>
-                                     <tr>
-                                        <td className="py-3 text-white font-medium">GamCare</td>
-                                        <td className="py-3 text-[#8d8c9e]">UK Advice Line</td>
-                                        <td className="py-3 text-right font-mono text-[#00FFC0]">0808 8020 133</td>
-                                    </tr>
-                                     <tr>
-                                        <td className="py-3 text-white font-medium">Gambling Therapy</td>
-                                        <td className="py-3 text-[#8d8c9e]">Global Online Chat</td>
-                                        <td className="py-3 text-right font-mono text-[#00FFC0]">gamblingtherapy.org</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </Card>
+                    
+                    {/* DE-ESCALATION GRAPHIC OR INFO */}
+                    <div className="flex flex-col justify-center p-8 bg-[#0c0c0e] border border-[#333] rounded-lg text-center opacity-80">
+                         <Icons.Activity className="h-24 w-24 text-[#333] mx-auto mb-6" />
+                         <h4 className="font-heading text-lg text-[#8d8c9e] uppercase mb-2">SIGNAL DISRUPTED?</h4>
+                         <p className="text-xs font-mono text-[#666] max-w-md mx-auto">
+                            // IF EMOTIONAL VARIANCE EXCEEDS OPERATIONAL PARAMETERS, CEASE ALL WAGERING ACTIVITY IMMEDIATELY.
+                        </p>
+                    </div>
                 </div>
             </section>
 
+            {/* 3. GLOBAL SUPPORT INFRASTRUCTURE */}
+             <section className="mb-16">
+                <h2 className="font-heading text-2xl text-white mb-6 flex items-center gap-3 border-b border-[#333] pb-4">
+                    <span className="text-[#00FFC0]">03 //</span> GLOBAL SUPPORT INFRASTRUCTURE
+                </h2>
+                
+                <Card className="p-0 overflow-hidden bg-[#0c0c0e] border-[#333]">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-[#14131c] text-xs text-[#8d8c9e] font-mono uppercase tracking-wider">
+                                <tr>
+                                    <th className="p-4 pl-6">Resource Name</th>
+                                    <th className="p-4">Focus/Region</th>
+                                    <th className="p-4">Contact Signal</th>
+                                    <th className="p-4 pr-6 min-w-[250px]">Additional Info</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-[#333]">
+                                {SUPPORT_RESOURCES.map((res, i) => (
+                                    <tr key={i} className="hover:bg-[#14131c] transition-colors">
+                                        <td className="p-4 pl-6 font-bold text-white">{res.name}</td>
+                                        <td className="p-4 text-[#8d8c9e] font-medium">{res.focus}</td>
+                                        <td className="p-4 font-mono text-[#00FFC0] whitespace-nowrap">{res.signal}</td>
+                                        <td className="p-4 pr-6 text-xs text-[#8d8c9e] leading-relaxed">{res.info}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+            </section>
+
+            {/* GUIDANCE NOTE */}
+            <div className="mb-8 p-5 bg-blue-950/20 border-l-4 border-blue-500 rounded-r-lg flex items-start gap-4">
+                <Icons.Info className="h-6 w-6 text-blue-400 flex-shrink-0 mt-1" />
+                <div className="text-sm text-blue-200/80 leading-relaxed">
+                    <strong className="text-blue-400 font-heading uppercase block mb-1">GUIDANCE NOTE</strong>
+                    Start with a single call—many offer immediate de-escalation scripts. For families: Most include affected-others programs. Track progress with ZAP's integrated journal; revisit quarterly. If in crisis, dial emergency services (e.g., 911/US, 999/UK) alongside helplines.
+                </div>
+            </div>
+
             {/* FOOTER CLARIFICATION */}
-            <div className="mt-16 p-6 bg-[#14131c] rounded-xl border-l-4 border-[#3a3846] flex items-start gap-4">
-                <Icons.Info className="h-6 w-6 text-[#8d8c9e] flex-shrink-0" />
-                <p className="text-sm text-[#8d8c9e] leading-relaxed font-mono">
-                    <strong className="text-white font-heading uppercase">ZAP STATUS CLARIFICATION:</strong> ZAP is a data platform. We do not process wagers, hold funds, or offer game transactions. Our role is to provide the intelligence; your role is to maintain the tactical discipline.
-                </p>
+            <div className="p-6 bg-[#14131c] rounded-xl border-l-4 border-[#333] flex items-start gap-4">
+                <Icons.Shield className="h-6 w-6 text-[#8d8c9e] flex-shrink-0" />
+                <div className="text-sm text-[#8d8c9e] leading-relaxed font-mono">
+                    <strong className="text-white font-heading uppercase block mb-1">ZAP STATUS CLARIFICATION: INTELLIGENCE, NOT INTERVENTION</strong>
+                    ZAP is your command center for unbiased data—True RTP, operator audits, community vetoes. We don't process bets, custody funds, or facilitate plays. Our mandate: Deliver the signal. Yours: Execute with unyielding discipline. Questions? Hit <a href="mailto:support@zap.gg" className="text-[#00FFC0] hover:underline">support@zap.gg</a> for tailored resources. Stay locked in—the Grid endures for those who command it.
+                </div>
             </div>
 
         </div>

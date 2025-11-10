@@ -135,17 +135,18 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
             <span className="text-xs text-[#8d8c9e] font-mono">FAIL (1)</span>
             <div className="flex gap-1 flex-1 justify-center">
                 {[1, 2, 3, 4, 5].map((val) => (
-                    <button
+                    <Button
                         key={val}
+                        disableSound={true}
                         onClick={() => handleInputChange(field, val)}
-                        className={`h-10 flex-1 max-w-[50px] rounded-sm font-bold transition-all border ${
-                            formData[field] >= val 
+                        className={`h-10 flex-1 max-w-[50px] rounded-sm font-bold transition-all !p-0
+                            ${formData[field] >= val 
                             ? 'bg-[#1ed760] border-[#1ed760] text-black shadow-[0_0_10px_rgba(29,215,96,0.3)]' 
                             : 'bg-[#14131c] border-[#3a3846] text-[#8d8c9e] hover:border-white/30'
                         }`}
                     >
                         {val}
-                    </button>
+                    </Button>
                 ))}
             </div>
             <span className="text-xs text-[#8d8c9e] font-mono">OPTIMAL (5)</span>

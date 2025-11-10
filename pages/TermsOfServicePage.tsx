@@ -21,22 +21,22 @@ export const TermsOfServicePage = () => {
                     </p>
                     <span className="hidden md:block text-[#333]">|</span>
                     <p className="text-[#8d8c9e] font-mono text-xs uppercase">
-                        LAST SYNCHRONIZED: NOVEMBER 07, 2025
+                        LAST SYNCHRONIZED: NOVEMBER 09, 2025
                     </p>
                 </div>
             </div>
 
             {/* INTRO MANIFESTO */}
             <Card className="p-8 bg-[#0c0c0e] border-[#00FFC0]/30 mb-12 relative overflow-hidden">
-                <div className="relative z-10">
-                     <h2 className="font-heading text-xl text-white mb-4 uppercase flex items-center gap-2">
+                 <div className="relative z-10">
+                    <h2 className="font-heading text-xl text-white mb-4 uppercase flex items-center gap-2">
                         <Icons.Zap className="h-5 w-5 text-[#00FFC0]" /> AGREEMENT PROTOCOL
                     </h2>
                     <p className="text-lg text-white leading-relaxed mb-4">
-                        Welcome to ZAP. We're data rebels, but even a revolution needs ground rules. These Terms ("The Rules") are a binding agreement between you, the player, and ZapWay Corporation.
+                        Welcome to ZAP. We're data rebels in a rigged game, but every revolution demands clear boundaries. These Terms of Service ("The Rules") form a binding contract between you—the sharp-eyed player—and ZapWay Corporation.
                     </p>
                     <p className="text-[#8d8c9e] leading-relaxed">
-                        By accessing, using, or plugging into the ZAP ecosystem, you agree to play by these rules. <strong className="text-white">No exceptions.</strong> If you don't agree, disconnect immediately.
+                        By accessing, using, or integrating with the ZAP ecosystem, you affirm your commitment to these Rules. <strong className="text-white">No wiggle room.</strong> If they don't align with your playstyle, log out now.
                     </p>
                 </div>
                 {/* subtle background grid */}
@@ -55,12 +55,16 @@ export const TermsOfServicePage = () => {
                         <Card className="p-6 bg-[#14131c] border-[#333]">
                             <Icons.Users className="h-8 w-8 text-[#00FFC0] mb-4" />
                             <h3 className="font-heading text-lg text-white uppercase mb-2">Minimum Age (18+)</h3>
-                            <p className="text-sm text-[#8d8c9e]">You must be at least 18 years of age or the highest legal gambling age in your jurisdiction. If you’re not of age, you’re not getting the data.</p>
+                            <p className="text-sm text-[#8d8c9e] leading-relaxed">
+                                You must be at least 18 years old, or the applicable legal gambling age in your jurisdiction. Underage? Access denied—no data for you.
+                            </p>
                         </Card>
                          <Card className="p-6 bg-[#14131c] border-[#333]">
                             <Icons.Globe className="h-8 w-8 text-blue-500 mb-4" />
                             <h3 className="font-heading text-lg text-white uppercase mb-2">Local Compliance</h3>
-                            <p className="text-sm text-[#8d8c9e]">It is your sole responsibility to confirm that using ZAP and interacting with operators is legal in your jurisdiction. We provide data, not legal advice.</p>
+                            <p className="text-sm text-[#8d8c9e] leading-relaxed">
+                                It's entirely on you to verify that ZAP's tools and linked operators comply with your local laws. We deliver raw intelligence, not legal counsel.
+                            </p>
                         </Card>
                     </div>
                 </section>
@@ -71,19 +75,27 @@ export const TermsOfServicePage = () => {
                          <span className="text-[#00FFC0]">02 //</span> CODE OF CONDUCT
                     </h2>
                     <Card className="p-6 bg-[#14131c] border-[#333]">
-                        <ul className="space-y-4">
-                            <li className="flex items-start gap-3">
-                                <Icons.CheckCircle className="h-5 w-5 text-[#00FFC0] shrink-0 mt-1" />
+                        <ul className="space-y-6">
+                            <li className="flex items-start gap-4">
+                                <div className="bg-[#00FFC0]/10 p-2 rounded-full shrink-0">
+                                    <Icons.CheckCircle className="h-5 w-5 text-[#00FFC0]" />
+                                </div>
                                 <div>
-                                    <strong className="text-white block font-heading uppercase text-sm">YOUR VOICE IS POWER</strong>
-                                    <span className="text-[#8d8c9e] text-sm">When you contribute (reviews, VPRs), you grant us a license to use that content to improve the platform's intelligence grid.</span>
+                                    <strong className="text-white block font-heading uppercase text-sm mb-1">YOUR VOICE IS POWER</strong>
+                                    <span className="text-[#8d8c9e] text-sm leading-relaxed">
+                                        When you contribute—via reviews, Validated Player Reports (VPRs), or other intel—you grant ZAP a perpetual, royalty-free license to leverage that content for enhancing our platform's core grid.
+                                    </span>
                                 </div>
                             </li>
-                            <li className="flex items-start gap-3">
-                                <Icons.X className="h-5 w-5 text-red-500 shrink-0 mt-1" />
+                            <li className="flex items-start gap-4">
+                                <div className="bg-red-500/10 p-2 rounded-full shrink-0">
+                                    <Icons.X className="h-5 w-5 text-red-500" />
+                                </div>
                                 <div>
-                                    <strong className="text-white block font-heading uppercase text-sm">ZERO NOISE POLICY</strong>
-                                    <span className="text-[#8d8c9e] text-sm">We have zero tolerance for spam, shilling, misinformation, or malicious activity. Pollute the signal, and you will be permanently unplugged.</span>
+                                    <strong className="text-white block font-heading uppercase text-sm mb-1">ZERO NOISE POLICY</strong>
+                                    <span className="text-[#8d8c9e] text-sm leading-relaxed">
+                                        We enforce a strict no-tolerance stance on spam, shilling, misinformation, or any disruptive tactics. Tarnish the signal, and face immediate, permanent disconnection.
+                                    </span>
                                 </div>
                             </li>
                         </ul>
@@ -93,19 +105,25 @@ export const TermsOfServicePage = () => {
                 {/* PROTOCOL 03: LIABILITY (CRITICAL) */}
                 <section>
                      <h2 className="font-heading text-2xl text-red-500 mb-6 flex items-center gap-3 border-b border-red-900/30 pb-4">
-                         <span className="text-red-500">03 //</span> CRITICAL: LIMITATION OF LIABILITY
+                         <span className="text-red-500">03 //</span> LIMITATION OF LIABILITY
                     </h2>
-                    <Card className="p-6 bg-red-950/10 border-red-900/50 mb-6">
-                        <div className="flex items-start gap-4">
+                    <Card className="p-6 bg-red-950/10 border-red-900/50 mb-6 relative overflow-hidden">
+                        {/* Caution stripes */}
+                        <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none" style={{backgroundImage: 'repeating-linear-gradient(45deg, #ff0000, #ff0000 10px, transparent 10px, transparent 20px)'}}></div>
+
+                        <div className="flex items-start gap-4 relative z-10">
                             <Icons.AlertTriangle className="h-8 w-8 text-red-500 shrink-0" />
                             <div className="space-y-4">
-                                <p className="text-white text-lg font-medium">
-                                    THE DATA IS NOT A GUARANTEE. ZAP provides intelligence, analysis, and reviews. We are <span className="text-red-500 font-bold">NOT</span> a casino, financial service, or operator.
+                                <h3 className="text-white font-heading uppercase text-lg">
+                                    CRITICAL NOTICE: DATA IS INTELLIGENCE, NOT INSURANCE
+                                </h3>
+                                <p className="text-[#8d8c9e] text-sm">
+                                    ZAP delivers unbiased analysis, scores, and community insights. We're not a casino, financial advisor, or betting operator—full stop.
                                 </p>
-                                <ul className="list-disc pl-4 space-y-2 text-[#8d8c9e] text-sm font-mono">
-                                    <li>ZAP IS NOT LIABLE FOR ANY FINANCIAL LOSSES INCURRED ON THIRD-PARTY PLATFORMS.</li>
-                                    <li>YOU USE EXTERNAL OPERATORS AT YOUR OWN SOLE RISK.</li>
-                                    <li>ALL CONTENT IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.</li>
+                                <ul className="list-disc pl-4 space-y-2 text-red-200/80 text-sm font-mono">
+                                    <li>ZAP bears no responsibility for financial losses from third-party platforms.</li>
+                                    <li>Engaging with external operators is at your exclusive risk.</li>
+                                    <li>All content is provided "AS IS," with no warranties, express or implied.</li>
                                 </ul>
                             </div>
                         </div>
@@ -117,12 +135,14 @@ export const TermsOfServicePage = () => {
                     <h2 className="font-heading text-2xl text-white mb-6 flex items-center gap-3 border-b border-[#333] pb-4">
                          <span className="text-[#00FFC0]">04 //</span> INTELLECTUAL PROPERTY
                     </h2>
-                    <p className="text-[#8d8c9e] mb-4">
-                        "Content" means all the good stuff we generate: ZAP Scores, raw RTP data, custom metrics, and branding.
-                    </p>
-                    <div className="bg-[#14131c] p-4 rounded border-l-4 border-[#00FFC0] text-sm text-white">
-                        Our data is built for the community's edge, but it remains our property. You can use it to win, but you cannot steal it to build a competitor.
-                    </div>
+                    <Card className="p-6 bg-[#14131c] border-[#333]">
+                        <p className="text-white mb-4 leading-relaxed">
+                            "Content" encompasses our proprietary arsenal: ZAP Scores, True RTP metrics, custom analytics, and all branding elements.
+                        </p>
+                        <div className="bg-[#0c0c0e] p-4 rounded border-l-4 border-[#00FFC0] text-sm text-[#8d8c9e] leading-relaxed">
+                            This intel sharpens the community's edge, but it stays our domain. Use it to outmaneuver the house—by all means. Just don't repurpose it to fuel a rival operation.
+                        </div>
+                    </Card>
                 </section>
 
             </div>
@@ -133,16 +153,16 @@ export const TermsOfServicePage = () => {
                     <h3 className="font-heading text-white uppercase mb-2 flex items-center gap-2">
                         <Icons.HelpCircle className="h-4 w-4 text-[#00FFC0]" /> Operational Support
                     </h3>
-                    <p className="text-[#8d8c9e] text-sm mb-2">For account, reward, or technical issues.</p>
+                    <p className="text-[#8d8c9e] text-sm mb-2">For account, rewards, or tech glitches.</p>
                     <a href="mailto:support@zap.gg" className="text-[#00FFC0] font-mono hover:underline">support@zap.gg</a>
                 </div>
                 <div>
                      <h3 className="font-heading text-white uppercase mb-2 flex items-center gap-2">
                         <Icons.Shield className="h-4 w-4 text-[#00FFC0]" /> Legal Comm Line
                     </h3>
-                    <p className="text-[#8d8c9e] text-sm mb-2">For formal disputes or compliance queries.</p>
+                    <p className="text-[#8d8c9e] text-sm mb-2">For disputes or compliance matters.</p>
                     <a href="mailto:legal@zap.gg" className="text-[#00FFC0] font-mono hover:underline">legal@zap.gg</a>
-                     <p className="text-xs text-[#666] mt-2 font-mono">
+                     <p className="text-xs text-[#666] mt-4 font-mono uppercase">
                         HQ: Premier Business Centre, Mutsamudu, Comoros
                     </p>
                 </div>

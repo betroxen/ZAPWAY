@@ -51,7 +51,26 @@ import {
   Crosshair,
   Server,
   Plus,
-  ExternalLink
+  ExternalLink,
+  GitMerge,
+  Repeat,
+  TrendingUp,
+  Github,
+  ChevronUp,
+  SearchX,
+  Gauge,
+  XCircle,
+  Scan,
+  Cpu,
+  Gavel,
+  Ghost,
+  Bomb,
+  Dices,
+  Grid3x3,
+  Binary,
+  Gem,
+  Terminal,
+  RefreshCw
 } from 'lucide-react';
 
 export const Icons = {
@@ -106,5 +125,24 @@ export const Icons = {
   Crosshair,
   Server,
   Plus,
-  ExternalLink
+  ExternalLink,
+  GitMerge,
+  Repeat,
+  TrendingUp,
+  Github,
+  ChevronUp,
+  SearchX,
+  Gauge,
+  XCircle,
+  Scan,
+  Cpu,
+  Gavel,
+  Ghost,
+  Bomb,
+  Dices,
+  Grid: Grid3x3,
+  Binary,
+  Gem,
+  Terminal,
+  RefreshCw
 };

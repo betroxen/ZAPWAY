@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AppContext, AppContextType } from './context/AppContext';
 import { ToastProvider } from './context/ToastContext';
@@ -8,6 +9,7 @@ import { AuthModal } from './components/AuthModal';
 import { FloatingActionButton } from './components/FloatingActionButton';
 import { Footer } from './sections/Footer';
 import { ReviewModal } from './components/ReviewModal';
+import { MobileBottomNav } from './components/MobileBottomNav';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -39,6 +41,10 @@ import { CommercialDisclosurePage } from './pages/CommercialDisclosurePage';
 import { PartnerVettingPage } from './pages/PartnerVettingPage';
 import { ReviewMethodologyPage } from './pages/ReviewMethodologyPage';
 import { KnowledgeBasePage } from './pages/KnowledgeBasePage';
+import { StrategySandboxPage } from './pages/StrategySandboxPage';
+import { MinesGamePage } from './pages/MinesGamePage';
+import { PlinkoGamePage } from './pages/PlinkoGamePage';
+import { ProvablyFairPage } from './pages/ProvablyFairPage';
 
 const App = () => {
   // Auth state
@@ -54,9 +60,8 @@ const App = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewCasinoId, setReviewCasinoId] = useState<string | null>(null);
 
-  // Simple initial route check could go here
   useEffect(() => {
-      // Placeholder for future session persistence check
+      // Placeholder for session persistence
   }, []);
 
   const handleOpenLogin = () => {
@@ -70,18 +75,17 @@ const App = () => {
   };
 
   const handleLoginSuccess = () => {
-      // Slight delay to allow auth modal success animation to play if we add one
       setTimeout(() => {
           setIsLoggedIn(true);
           setIsAuthModalOpen(false);
           setCurrentPage('Dashboard');
           window.scrollTo(0, 0);
-      }, 500);
+      }, 400);
   };
 
   const handleLogout = () => {
       setIsLoggedIn(false);
-      setCurrentPage('Home'); // Effectively ignored as standard HomePage renders when !isLoggedIn
+      setCurrentPage('Home');
   };
 
   const handleOpenReviewModal = (casinoId?: string) => {
@@ -93,14 +97,13 @@ const App = () => {
     currentPage,
     setCurrentPage: (page) => {
         if (!isLoggedIn) {
-             // If not logged in, trying to navigate just opens login
              handleOpenLogin();
              return;
         }
         setCurrentPage(page);
         setViewingCasinoId(null);
-        setIsMobileNavOpen(false); // Close mobile nav on navigation
-        window.scrollTo(0, 0);
+        setIsMobileNavOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     isLoggedIn,
     setViewingCasinoId
@@ -139,17 +142,23 @@ const App = () => {
       case 'Partner Vetting': return <PartnerVettingPage />;
       case 'Review Methodology': return <ReviewMethodologyPage />;
       case 'Knowledge Base': return <KnowledgeBasePage />;
+      case 'Strategy Sandbox': return <StrategySandboxPage />;
+      case 'Mines': return <MinesGamePage />;
+      case 'Plinko': return <PlinkoGamePage />;
+      case 'Provably Fair': return <ProvablyFairPage />;
       default: return <DashboardPage setViewingCasinoId={setViewingCasinoId} />;
     }
   };
+
+  // Determine if footer should be hidden for immersive pages
+  const hideFooter = ['Dashboard', 'Messages', 'Strategy Sandbox', 'Mines', 'Plinko'].includes(currentPage);
 
   return (
     <AppContext.Provider value={appContextValue}>
       <ToastProvider>
         <GlobalStyles />
-        <div className={`min-h-screen w-full bg-[#121212] text-[#FAFBFF] ${(isAuthModalOpen || isReviewModalOpen || isMobileNavOpen) ? 'modal-open' : ''}`}>
+        <div className={`relative min-h-screen w-full max-w-[100vw] bg-[#0A0A0A] text-[#FAFBFF] overflow-x-hidden ${(isAuthModalOpen || isReviewModalOpen || isMobileNavOpen) ? 'modal-open' : ''}`}>
           
-          {/* AUTH MODAL - Always available to be triggered */}
           <AuthModal
             isOpen={isAuthModalOpen}
             onClose={() => setIsAuthModalOpen(false)}
@@ -157,58 +166,53 @@ const App = () => {
             onLoginSuccess={handleLoginSuccess}
           />
 
+          {/* FIXED HEADER */}
+          <Header 
+              onOpenLogin={handleOpenLogin} 
+              onOpenRegister={handleOpenRegister} 
+              isLoggedIn={isLoggedIn} 
+              onLogout={handleLogout}
+              isSidebarCollapsed={isSidebarCollapsed}
+              onOpenReview={() => handleOpenReviewModal()}
+              onToggleMobileNav={() => setIsMobileNavOpen(!isMobileNavOpen)}
+          />
+
           {!isLoggedIn ? (
             // === PUBLIC LANDING LAYOUT ===
-            <div className="flex flex-col min-h-screen animate-fadeIn bg-[#121212]">
-                 <Header 
-                    onOpenLogin={handleOpenLogin} 
-                    onOpenRegister={handleOpenRegister} 
-                    isLoggedIn={false} 
-                    onLogout={handleLogout}
-                    isSidebarCollapsed={true} // Always "collapsed" (hidden) in public view
-                />
-                <main className="flex-1">
-                    {/* We use HomePage as the landing page content */}
+            <div className="flex flex-col min-h-screen pt-16">
+                <main className="flex-1 w-full animate-depth-in">
                     <HomePage onOpenLogin={handleOpenLogin} onOpenRegister={handleOpenRegister} isLoggedIn={false} />
                 </main>
                 <Footer />
             </div>
           ) : (
             // === AUTHENTICATED APP LAYOUT ===
-            <div className="flex min-h-screen animate-fadeIn bg-[#121212]">
-               <Sidebar 
-                    isCollapsed={isSidebarCollapsed} 
-                    setIsCollapsed={setIsSidebarCollapsed}
-                    isMobileOpen={isMobileNavOpen}
-                    setIsMobileOpen={setIsMobileNavOpen}
-               />
-               
-               <div className="flex flex-1 flex-col min-w-0 transition-all duration-300">
-                    <Header 
-                        onOpenLogin={handleOpenLogin} 
-                        onOpenRegister={handleOpenRegister} 
-                        isLoggedIn={true} 
-                        onLogout={handleLogout}
-                        isSidebarCollapsed={isSidebarCollapsed}
-                        onOpenReview={() => handleOpenReviewModal()}
-                        onToggleMobileNav={() => setIsMobileNavOpen(!isMobileNavOpen)}
-                    />
-                    
-                    <main className="flex-1 overflow-x-hidden bg-[#121212]">
-                        {renderContent()}
-                    </main>
+            <>
+                <div className="flex min-h-screen pt-16">
+                   <Sidebar 
+                        isCollapsed={isSidebarCollapsed} 
+                        setIsCollapsed={setIsSidebarCollapsed}
+                        isMobileOpen={isMobileNavOpen}
+                        setIsMobileOpen={setIsMobileNavOpen}
+                   />
+                   
+                   {/* Main Content Area with smoother transition */}
+                   <div className={`flex flex-1 flex-col min-w-0 w-full transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarCollapsed ? 'md:ml-[72px]' : 'md:ml-64'}`}>
+                        <main key={currentPage} className="flex-1 w-full bg-[#0A0A0A] pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 animate-depth-in">
+                            {renderContent()}
+                        </main>
+                        {!hideFooter && <Footer />}
+                   </div>
+                </div>
 
-                    {/* Hide footer on highly interactive full-height pages */}
-                    {currentPage !== 'Dashboard' && currentPage !== 'Messages' && <Footer />}
-               </div>
-
+                <MobileBottomNav onToggleMenu={() => setIsMobileNavOpen(!isMobileNavOpen)} />
                 <FloatingActionButton />
                 <ReviewModal
                     isOpen={isReviewModalOpen}
                     onClose={() => setIsReviewModalOpen(false)}
                     initialCasinoId={reviewCasinoId}
                 />
-            </div>
+            </>
           )}
         </div>
       </ToastProvider>

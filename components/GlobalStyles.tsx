@@ -2,125 +2,126 @@
 import React from 'react';
 
 export const GlobalStyles = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
-   
-    html, body, #root {
-      height: 100%;
-      margin: 0;
-      padding: 0;
+  <style dangerouslySetInnerHTML={{ __html: `
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;700&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+    :root {
+      --zap-green: #00FFC0;
+      --bg-dark: #0A0A0A;
+      --bg-card: #14131c;
+      --ease-sleek: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #121212;
+      background-color: var(--bg-dark);
       color: #FAFBFF;
-      /* Subtle noise texture for depth */
-      background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 100px 100px;
-    }
-    .font-body {
-      font-family: 'Inter', sans-serif;
-    }
-    .font-heading {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
-    .font-mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 600;
+      font-family: 'Rajdhani', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      scrollbar-color: #333333 #0A0A0A;
     }
 
-    /* Neon Text Glow Utility */
-    .text-glow {
-      text-shadow: 0 0 10px rgba(0, 255, 192, 0.5);
-    }
-
-    /* Custom Scrollbar - Darker with Neon accent on hover */
+    /* === ZAP V5.2 KINETIC SCROLLBAR === */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
     }
+
     ::-webkit-scrollbar-track {
-      background: #121212;
+      background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
-      background: #333333;
-      border-radius: 3px;
+      background: #333;
+      border-radius: 10px;
+      transition: background 0.3s ease;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: #00FFC0;
     }
 
-    /* Modal open body styles */
-    .modal-open {
-      overflow: hidden;
+    /* Utility Classes */
+    .font-heading { font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .font-tactical { font-family: 'Rajdhani', sans-serif; font-weight: 500; }
+    .text-glow { text-shadow: 0 0 12px rgba(0, 255, 192, 0.6); }
+    .transition-sleek { transition: all 0.3s var(--ease-sleek); }
+
+    /* V5.1 Kinetic Animations */
+    @keyframes depthScaleIn {
+      0% { opacity: 0; transform: scale(0.98) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* Page fade-in animation - faster kinetic feel */
-    .page-fade-in {
-      animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-fadeIn {
-        animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 192, 0.1); }
+      50% { box-shadow: 0 0 30px rgba(0, 255, 192, 0.4); }
     }
 
-    @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(20px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    .animate-slideInRight {
-        animation: slideInRight 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    @keyframes scanline {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
 
-    /* RAPID TAB SLIDE (V4.0 Console) */
-    @keyframes tabSlideIn {
-      from { opacity: 0; transform: translateX(15px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes movingGrid {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
     }
-    .animate-tabSlideIn {
-      animation: tabSlideIn 0.2s ease-out forwards;
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 192, 0.2); }
-      50% { box-shadow: 0 0 20px rgba(0, 255, 192, 0.6); }
-    }
-    .animate-pulse-glow {
-       animation: pulse-glow 2s infinite;
+    
+    @keyframes modalEnter {
+        from { opacity: 0; transform: scale(0.96) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* MODAL MATERIALIZE ANIMATION (V4.0) */
-    @keyframes materialize {
-      0% { opacity: 0; transform: scale(0.95); box-shadow: 0 0 0 rgba(0,255,192,0); }
-      60% { box-shadow: 0 0 40px rgba(0,255,192,0.2); border-color: rgba(0,255,192,0.5); }
-      100% { opacity: 1; transform: scale(1.0); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-color: #333333; }
-    }
-    .animate-materialize {
-        animation: materialize 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    @keyframes glitchReveal {
+      0% { opacity: 0; clip-path: inset(50% 0 50% 0); }
+      100% { opacity: 1; clip-path: inset(0 0 0 0); }
     }
 
-    /* Tooltip styles */
-    .tooltip::after {
-        content: '';
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #1A1A1A transparent transparent transparent;
-    }
+    .animate-depth-in { animation: depthScaleIn 0.5s var(--ease-sleek) forwards; }
+    .animate-fade-up { opacity: 0; animation: fadeUp 0.6s var(--ease-sleek) forwards; }
+    .animate-pulse-glow { animation: pulseGlow 4s infinite ease-in-out; }
+    .animate-pulse-slow { animation: pulseGlow 6s infinite ease-in-out; }
+    .animate-scanline { animation: scanline 4s linear infinite; }
+    .animate-moving-grid { animation: movingGrid 10s linear infinite; }
+    .animate-modal-enter { animation: modalEnter 0.4s var(--ease-sleek) forwards; }
+    .animate-glitch-reveal { animation: glitchReveal 0.4s steps(5, end) forwards; }
 
-  `}</style>
+    /* Standard Fade */
+    .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    /* Tab Slide Animation */
+    .animate-tabSlideIn { animation: tabSlideIn 0.4s var(--ease-sleek) forwards; }
+    @keyframes tabSlideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+    
+    /* Page Load Fade */
+    .page-fade-in { animation: depthScaleIn 0.4s var(--ease-sleek) forwards; }
+
+    /* Modal Locking */
+    body.modal-open { overflow: hidden; padding-right: 5px; /* compensate for scrollbar */ }
+    
+    /* Tactical Card Hover Common */
+    .card-hover {
+        transition: all 0.3s var(--ease-sleek);
+    }
+    .card-hover:hover {
+        transform: translateY(-4px);
+        border-color: rgba(0, 255, 192, 0.4);
+        box-shadow: 0 10px 30px -10px rgba(0, 255, 192, 0.2);
+    }
+  `}} />
 );

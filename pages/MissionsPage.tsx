@@ -31,7 +31,7 @@ const MASTERY_MISSIONS = [
 export const MissionsPage = () => {
   const appContext = useContext(AppContext);
 
-  const MissionCard = ({ mission, isMastery = false }: { mission: any, isMastery?: boolean }) => {
+  const MissionCard: React.FC<{ mission: any, isMastery?: boolean }> = ({ mission, isMastery = false }) => {
       const isClaimable = mission.status === 'COMPLETE';
       const isClaimed = mission.status === 'CLAIMED';
 

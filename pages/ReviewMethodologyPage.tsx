@@ -4,160 +4,140 @@ import { Icons } from '../components/icons';
 import { Card } from '../components/Card';
 
 export const ReviewMethodologyPage = () => {
-    const PILLARS = [
-        {
-            id: "I",
-            title: "TRUE RTP & FEES",
-            weight: "40%",
-            icon: Icons.Percent,
-            color: "text-[#00FFC0]",
-            border: "border-[#00FFC0]/30",
-            bg: "bg-[#00FFC0]/5",
-            source: "Dedicated ZAP Data Engine & On-Chain Audit",
-            focus: "RAW MATH. Audited payout rates, low house edge, and minimal withdrawal fees. This determines your statistical win probability."
-        },
-        {
-            id: "II",
-            title: "SECURITY & COMPLIANCE",
-            weight: "30%",
-            icon: Icons.Shield,
-            color: "text-blue-400",
-            border: "border-blue-500/30",
-            bg: "bg-blue-500/5",
-            source: "ZAP Vetting Team & Live License Monitoring",
-            focus: "PROTECTION. Verifiable RNG, robust AML/KYC protocols, and evidence of sufficient operational capital to cover all player balances."
-        },
-        {
-            id: "III",
-            title: "COMMUNITY VETO",
-            weight: "20%",
-            icon: Icons.Users,
-            color: "text-purple-400",
-            border: "border-purple-500/30",
-            bg: "bg-purple-500/5",
-            source: "Validated Player Reports (VPRs) & Forum Sentiment",
-            focus: "PLAYER VOICE. Honest, uncensored feedback on payout speed, support competence, and term clarity. The ultimate integrity check."
-        },
-        {
-            id: "IV",
-            title: "USER EXPERIENCE (UX)",
-            weight: "10%",
-            icon: Icons.LayoutDashboard,
-            color: "text-yellow-500",
-            border: "border-yellow-500/30",
-            bg: "bg-yellow-500/5",
-            source: "UI/Mobile Audit & Platform Stability Checks",
-            focus: "EFFICIENCY. The speed, mobile responsiveness, and overall stability of the gaming interface during peak loads."
-        }
-    ];
-
     return (
         <div className="container mx-auto max-w-5xl p-4 py-10 md:p-12 page-fade-in">
             
             {/* HEADER */}
             <div className="mb-12">
-                <div className="flex items-center gap-3 mb-2">
-                    <Icons.Database className="h-8 w-8 text-[#00FFC0] animate-pulse-slow" />
-                    <h1 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-wider">
+                <div className="flex items-center gap-3 mb-4">
+                    <Icons.Target className="h-10 w-10 text-[#00FFC0] animate-pulse-slow" />
+                    <h1 className="font-heading text-3xl md:text-5xl font-bold text-white uppercase tracking-wider">
                         ZAP SCORE METHODOLOGY
                     </h1>
                 </div>
-                <p className="text-[#00FFC0] font-mono text-sm uppercase tracking-widest ml-11">
-                    // THE DATA CONTRACT V2.0 // STATUS: ACTIVE
-                </p>
+                <div className="flex flex-col md:flex-row gap-4 md:items-center">
+                    <p className="text-[#00FFC0] font-mono text-sm uppercase tracking-widest">
+                        // ALGORITHMIC TRANSPARENCY // STATUS: ACTIVE V2.1
+                    </p>
+                    <span className="hidden md:block text-[#333]">|</span>
+                    <p className="text-[#8d8c9e] font-mono text-xs uppercase">
+                        LAST CALIBRATION: NOVEMBER 01, 2025
+                    </p>
+                </div>
             </div>
 
-            {/* INTRO MISSION */}
-            <Card className="mb-16 p-8 bg-[#0c0c0e] border-[#00FFC0]/30 relative overflow-hidden">
+            {/* CORE MANIFESTO */}
+            <Card className="p-8 bg-[#0c0c0e] border-[#00FFC0]/30 mb-16 relative overflow-hidden">
                  <div className="relative z-10">
-                    <h2 className="font-heading text-xl text-white mb-4 uppercase">TRANSPARENCY IS NON-NEGOTIABLE</h2>
-                    <p className="text-lg text-[#8d8c9e] leading-relaxed max-w-3xl">
-                        The ZAP Score is the gold standard because it’s immune to external influence. It is a live, dynamic rating determined by four weighted data streams. <strong className="text-white">If an operator compromises on one, the entire rating drops.</strong>
+                    <h2 className="font-heading text-xl text-white mb-4 uppercase flex items-center gap-2">
+                        <Icons.Zap className="h-5 w-5 text-[#00FFC0]" /> WE DON'T SELL RATINGS. WE ENGINEER THEM.
+                    </h2>
+                    <p className="text-lg text-white leading-relaxed mb-6">
+                        The ZAP Score is the only rating in the crypto space that cannot be bought. It is a dynamic, mercilessly objective metric built from three non-negotiable data streams. If an operator tries to game the system, the system adapts. This is how we calculate the edge.
                     </p>
                 </div>
                 {/* subtle background grid */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0, 255, 192, 0.1) 25%, rgba(0, 255, 192, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 192, 0.1) 75%, rgba(0, 255, 192, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 192, 0.1) 25%, rgba(0, 255, 192, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 192, 0.1) 75%, rgba(0, 255, 192, 0.1) 76%, transparent 77%, transparent)', backgroundSize: '50px 50px'}}></div>
+                <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(rgba(0,255,192,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,192,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
             </Card>
 
-            {/* THE FOUR PILLARS */}
-            <section className="mb-20">
+            {/* PILLAR 1: DATA */}
+            <section className="mb-16">
                 <h2 className="font-heading text-2xl text-white mb-8 flex items-center gap-3 border-b border-[#333] pb-4">
-                    <Icons.Activity className="h-6 w-6 text-[#00FFC0]" /> THE FOUR PILLARS (WEIGHTED DATA STREAMS)
+                    <span className="text-[#00FFC0]">40% //</span> THE HARD DATA WEIGHT (Quantitative Facts)
                 </h2>
-                <div className="grid grid-cols-1 gap-6">
-                    {PILLARS.map((pillar) => (
-                        <Card key={pillar.id} className={`p-0 overflow-hidden border-[#333] transition-all duration-300 hover:border-opacity-50 ${pillar.border}`}>
-                            <div className="flex flex-col md:flex-row">
-                                {/* Weighting Module */}
-                                <div className={`p-6 md:w-48 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-[#333] ${pillar.bg}`}>
-                                    <pillar.icon className={`h-10 w-10 mb-2 ${pillar.color}`} />
-                                    <span className={`font-mono text-4xl font-bold ${pillar.color}`}>{pillar.weight}</span>
-                                    <span className="font-heading text-xs text-[#8d8c9e] uppercase tracking-widest mt-1">Impact Load</span>
-                                </div>
-                                {/* Details Module */}
-                                <div className="p-6 flex-1 bg-[#14131c]">
-                                    <h3 className="font-heading text-xl text-white uppercase mb-4 flex items-center gap-2">
-                                        <span className={`${pillar.color}`}>{pillar.id}.</span> {pillar.title}
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <div className="md:col-span-1">
-                                            <span className="text-xs font-mono text-[#8d8c9e] uppercase block mb-1">Data Source</span>
-                                            <span className="text-sm text-white font-medium">{pillar.source}</span>
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <span className="text-xs font-mono text-[#8d8c9e] uppercase block mb-1">Dynamic Metric Focus</span>
-                                            <p className="text-sm text-[#8d8c9e] leading-relaxed">{pillar.focus}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
-                    ))}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card className="p-6 bg-[#14131c] border-[#333] hover:border-[#00FFC0]/30 transition-all">
+                        <Icons.Activity className="h-8 w-8 text-[#00FFC0] mb-4" />
+                        <h3 className="font-heading text-lg text-white uppercase mb-2">True RTP Audits</h3>
+                        <p className="text-sm text-[#8d8c9e] leading-relaxed">
+                            We measure actual historical return rates against advertised theoretical RTPs. Significant deviation triggers an automatic penalty.
+                        </p>
+                    </Card>
+                    <Card className="p-6 bg-[#14131c] border-[#333] hover:border-[#00FFC0]/30 transition-all">
+                        <Icons.Zap className="h-8 w-8 text-[#00FFC0] mb-4" />
+                        <h3 className="font-heading text-lg text-white uppercase mb-2">Payout Velocity</h3>
+                        <p className="text-sm text-[#8d8c9e] leading-relaxed">
+                            Speed is trust. We track average withdrawal times for crypto transactions. Delays >24h for standard KYC'd accounts reduce this score to zero.
+                        </p>
+                    </Card>
+                     <Card className="p-6 bg-[#14131c] border-[#333] hover:border-[#00FFC0]/30 transition-all">
+                        <Icons.Percent className="h-8 w-8 text-[#00FFC0] mb-4" />
+                        <h3 className="font-heading text-lg text-white uppercase mb-2">Fee Structure</h3>
+                        <p className="text-sm text-[#8d8c9e] leading-relaxed">
+                            Hidden deposit or withdrawal fees are wealth extractors. Zero-fee operators receive maximum points in this vector.
+                        </p>
+                    </Card>
                 </div>
             </section>
 
-            {/* VETO & DECAY GRID */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                {/* VETO MECHANISM (FAIL-SAFE) */}
-                <Card className="p-8 bg-red-950/10 border-red-900/50 relative overflow-hidden">
-                    <div className="absolute -right-10 -top-10 opacity-5">
-                        <Icons.X className="h-64 w-64 text-red-500" />
-                    </div>
-                    <div className="relative z-10">
-                        <h3 className="font-heading text-2xl text-red-500 mb-6 flex items-center gap-3 uppercase">
-                            <Icons.AlertTriangle className="h-6 w-6" /> Community Intervention (Veto)
-                        </h3>
-                        <p className="text-white mb-6">
-                            The platform's ultimate fail-safe. If the collective, verified player experience reports consistent critical issues (e.g., slow payouts, hidden terms), the system triggers an <strong>immediate formal re-audit.</strong>
+            {/* PILLAR 2: SECURITY */}
+            <section className="mb-16">
+                <h2 className="font-heading text-2xl text-white mb-8 flex items-center gap-3 border-b border-[#333] pb-4">
+                    <span className="text-[#00FFC0]">30% //</span> THE SECURITY WEIGHT (Vetting Protocol)
+                </h2>
+                <div className="bg-[#0c0c0e] p-6 rounded-xl border border-[#333] flex flex-col md:flex-row gap-8 items-center">
+                    <div className="flex-1">
+                        <p className="text-[#8d8c9e] mb-6 text-lg">
+                            If the foundation is rotten, the house will fall. This is a binary pass/fail gate before scoring even begins.
                         </p>
-                        <div className="bg-black/40 p-4 rounded border-l-2 border-red-500">
-                            <strong className="text-red-400 font-mono text-xs uppercase block mb-1">PROTOCOL ACTION:</strong>
-                            <span className="text-[#8d8c9e] text-sm">The ZAP Score is instantly <span className="text-white font-bold">SUSPENDED</span> and a public VETO WARNING is issued. The community always dictates trust.</span>
-                        </div>
+                        <ul className="space-y-4">
+                            <li className="flex items-center gap-3 p-3 bg-[#14131c] rounded border border-[#333]">
+                                <Icons.Shield className="h-5 w-5 text-purple-500" />
+                                <span className="text-white font-heading uppercase text-sm">VALID GAMING LICENSE (CURAÇAO, MALTA, ETC.)</span>
+                            </li>
+                            <li className="flex items-center gap-3 p-3 bg-[#14131c] rounded border border-[#333]">
+                                <Icons.Lock className="h-5 w-5 text-purple-500" />
+                                <span className="text-white font-heading uppercase text-sm">SSL ENCRYPTION & COLD WALLET STORAGE</span>
+                            </li>
+                            <li className="flex items-center gap-3 p-3 bg-[#14131c] rounded border border-[#333]">
+                                <Icons.FileText className="h-5 w-5 text-purple-500" />
+                                <span className="text-white font-heading uppercase text-sm">TRANSPARENT T&C (NO PREDATORY CLAUSES)</span>
+                            </li>
+                        </ul>
                     </div>
-                </Card>
+                    <div className="p-8 bg-[#14131c] rounded-full border-4 border-purple-500/20 flex items-center justify-center">
+                        <Icons.Shield className="h-24 w-24 text-purple-500" />
+                    </div>
+                </div>
+            </section>
 
-                {/* SCORE DECAY (MAINTENANCE) */}
-                <Card className="p-8 bg-[#14131c] border-[#333]">
-                     <h3 className="font-heading text-2xl text-white mb-6 flex items-center gap-3 uppercase">
-                        <Icons.Clock className="h-6 w-6 text-yellow-500" /> Score Decay Algorithm
-                    </h3>
-                    <p className="text-[#8d8c9e] mb-6">
-                        The ZAP Score is a living contract; it must be earned daily. We utilize a decay algorithm to ensure data doesn't go stale.
-                    </p>
-                    <ul className="space-y-4 text-sm">
-                        <li className="flex items-start gap-3">
-                            <Icons.Activity className="h-5 w-5 text-yellow-500 shrink-0" />
-                            <span className="text-[#8d8c9e]"><strong className="text-white">Dynamic Data:</strong> Older VPRs and RTP audits carry progressively less weight over time.</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                            <Icons.Shield className="h-5 w-5 text-yellow-500 shrink-0" />
-                            <span className="text-[#8d8c9e]"><strong className="text-white">Compliance Decay:</strong> Failing to update a required license triggers an accelerated decay in Pillar II.</span>
-                        </li>
-                    </ul>
-                </Card>
+             {/* PILLAR 3: COMMUNITY */}
+            <section className="mb-16">
+                <h2 className="font-heading text-2xl text-white mb-8 flex items-center gap-3 border-b border-[#333] pb-4">
+                    <span className="text-[#00FFC0]">30% //</span> THE COMMUNITY WEIGHT (Player Signal)
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <Card className="p-6 bg-[#14131c] border-[#333]">
+                        <h3 className="font-heading text-lg text-white uppercase mb-4 flex items-center gap-2">
+                            <Icons.MessageSquare className="h-5 w-5 text-blue-400" /> Validated Player Reports (VPRs)
+                        </h3>
+                        <p className="text-sm text-[#8d8c9e] leading-relaxed mb-4">
+                            Not all reviews are equal. A VPR requires proof of play (TxID, screenshots). We weight these based on the reporter's reputation level within the ZAP ecosystem.
+                        </p>
+                        <div className="flex gap-2">
+                            <span className="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-mono rounded border border-blue-500/30">LVL 50+ = 3X WEIGHT</span>
+                             <span className="px-3 py-1 bg-[#333] text-[#8d8c9e] text-xs font-mono rounded border border-[#333]">NEW USER = 1X WEIGHT</span>
+                        </div>
+                    </Card>
+                    <Card className="p-6 bg-red-950/10 border-red-900/50">
+                        <h3 className="font-heading text-lg text-red-500 uppercase mb-4 flex items-center gap-2">
+                            <Icons.AlertTriangle className="h-5 w-5" /> The Community Veto
+                        </h3>
+                        <p className="text-sm text-[#8d8c9e] leading-relaxed mb-4">
+                            The ultimate kill switch. If a statistically significant volume of negative VPRs hits an operator in a 48h window, their ZAP Score is automatically suspended pending a manual forensic audit.
+                        </p>
+                        <span className="text-red-400 font-mono text-xs uppercase">> POWER TO THE PLAYERS</span>
+                    </Card>
+                </div>
+            </section>
 
+            {/* DYNAMIC DISCLAIMER */}
+            <div className="p-6 bg-[#14131c] rounded-xl border-l-4 border-[#00FFC0] flex items-start gap-4">
+                <Icons.Activity className="h-6 w-6 text-[#00FFC0] flex-shrink-0 mt-1" />
+                <div className="text-sm text-[#8d8c9e] leading-relaxed font-mono">
+                    <strong className="text-white font-heading uppercase block mb-1">DYNAMIC SCORING ADVISORY</strong>
+                    The ZAP Score is alive. It is recalculated daily based on incoming data streams. An operator that was rated 4.8 yesterday can drop to 3.2 today if they change their withdrawal policy or fail a community audit. Always check the "Last Verified" timestamp before engaging.
+                </div>
             </div>
 
         </div>
