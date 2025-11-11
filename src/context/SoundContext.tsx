@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect, useRef, ReactNode } from 'react';
 
 // Define the available sound keys for strict typing
@@ -28,7 +27,6 @@ interface SoundContextType {
 export const SoundContext = createContext<SoundContextType | undefined>(undefined);
 
 // V5.1 AUDIO ASSET MANIFEST
-// Using reliable CDNs. In production, these should be local assets.
 const SOUND_MANIFEST: Record<SoundType, string> = {
     // UI Sounds
     click_primary: 'https://cdn.freesound.org/previews/676/676653_5674468-lq.mp3', // Crisp click
@@ -71,14 +69,12 @@ export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
     }, [isMuted]);
 
-    // ONE-TIME AUDIO UNLOCKER (Fixes "Not connected properly" issues due to Autoplay policies)
+    // ONE-TIME AUDIO UNLOCKER
     useEffect(() => {
         const unlockAudio = () => {
-            // Play a tiny silent sound to unlock the browser's audio engine for this page
             const silent = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA");
-            silent.play().catch((e) => { /* Ignore unlock errors */ });
+            silent.play().catch((e) => {});
 
-            // Preload critical sounds after unlock
             ['click_primary', 'success', 'error'].forEach(type => {
                 if (!audioCache.current[type as SoundType]) {
                     const audio = new Audio(SOUND_MANIFEST[type as SoundType]);
@@ -87,7 +83,6 @@ export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 }
             });
 
-            // Remove listeners once unlocked
             document.removeEventListener('click', unlockAudio);
             document.removeEventListener('keydown', unlockAudio);
             document.removeEventListener('touchstart', unlockAudio);
@@ -112,12 +107,9 @@ export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             if (!baseAudio) {
                 baseAudio = new Audio(SOUND_MANIFEST[type]);
                 baseAudio.preload = 'auto';
-                // Cache it for next time
                 audioCache.current[type] = baseAudio;
             }
 
-            // Clone node for overlapping playback (essential for Plinko/rapid clicks)
-            // We cast to any because cloneNode technically returns Node, but we know it's an audio element.
             const audioClone = baseAudio.cloneNode() as HTMLAudioElement;
             audioClone.volume = Math.min(Math.max(volume, 0), 1);
 

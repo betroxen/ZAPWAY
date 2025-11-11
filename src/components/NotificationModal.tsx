@@ -28,7 +28,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, on
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={onClose} />
       <div className="relative w-full max-w-sm rounded-lg bg-[#14131c] p-8 text-center shadow-2xl ring-1 ring-[#3a3846]">
-        <span className="mb-4 inline-block rounded-full bg-[#1ed760]/10 p-3 text-[#1ed760]">
+        <span className="mb-4 inline-block rounded-full bg-[#00FFC0]/10 p-3 text-[#00FFC0]">
           <Icons.Zap className="h-6 w-6" />
         </span>
         <h2 className="font-heading text-xl font-bold text-white mb-2">{title}</h2>

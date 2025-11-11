@@ -70,7 +70,7 @@ export const AccordionTrigger: React.FC<AccordionTriggerProps> = ({ children }) 
   const isOpen = openItems.includes(value);
   return (
     <button
-      className="font-heading flex w-full items-center justify-between py-5 text-left text-base font-medium text-white hover:text-[#1ed760]"
+      className="font-heading flex w-full items-center justify-between py-5 text-left text-base font-medium text-white hover:text-[#00FFC0]"
       onClick={() => toggleItem(value)}
     >
       <span>{children}</span>

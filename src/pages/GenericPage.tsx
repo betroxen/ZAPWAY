@@ -23,9 +23,9 @@ export const GenericPage: React.FC<GenericPageProps> = ({ title, intro, cards, c
       <p className="text-lg text-[#8d8c9e] mb-10">{intro}</p>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {cards.map((card, index) => (
-          <Card key={index} className="p-8 group hover:border-[#1ed760]/50 hover:-translate-y-2">
-            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#1ed760]/10">
-              <card.icon className="h-6 w-6 text-[#1ed760]" />
+          <Card key={index} className="p-8 group hover:border-[#00FFC0]/50 hover:-translate-y-2">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#00FFC0]/10">
+              <card.icon className="h-6 w-6 text-[#00FFC0]" />
             </div>
             <h3 className="font-heading mb-3 text-2xl font-semibold text-white">{card.title}</h3>
             <p className="text-[#8d8c9e]">{card.description}</p>

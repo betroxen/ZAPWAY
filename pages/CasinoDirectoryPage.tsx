@@ -1,19 +1,28 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { mockCasinosData } from '../constants/casinos';
 import { Icons } from '../components/icons';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Toggle } from '../components/Toggle';
+import { SkeletonCard } from '../components/SkeletonCard';
 
 export const CasinoDirectoryPage = ({ setViewingCasinoId }: { setViewingCasinoId: (id: string | null) => void; }) => {
+    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('rating');
     const [filterCategory, setFilterCategory] = useState('ALL');
     const [minRating, setMinRating] = useState(0);
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
     const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Process Data
     const filteredCasinos = useMemo(() => {
@@ -168,123 +177,125 @@ export const CasinoDirectoryPage = ({ setViewingCasinoId }: { setViewingCasinoId
 
                     {/* Results Status */}
                     <div className="mb-4 flex items-center justify-between px-1">
-                        <p className="font-mono text-xs text-[#8d8c9e] uppercase">
-                            // DISPLAYING <span className="text-white font-bold">{filteredCasinos.length}</span> INTEL UNITS
-                        </p>
+                        {!loading && (
+                            <p className="font-mono text-xs text-[#8d8c9e] uppercase">
+                                // DISPLAYING <span className="text-white font-bold">{filteredCasinos.length}</span> INTEL UNITS
+                            </p>
+                        )}
                     </div>
 
                     {/* GRID */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 pb-8">
-                        {filteredCasinos.map((casino, index) => {
-                            const isEternalCrown = casino.specialRanking === 'ETERNAL CROWN';
-                            return (
-                                <Card 
-                                    key={casino.id} 
-                                    className={`p-0 overflow-hidden bg-[#14131c] group flex flex-col animate-fadeIn relative
-                                        ${isEternalCrown 
-                                            ? 'border-[#00FFC0] shadow-[0_0_30px_rgba(0,255,192,0.15)] hover:shadow-[0_0_50px_rgba(0,255,192,0.3)]' 
-                                            : 'border-[#333] hover:border-[#00FFC0]/50'}`} 
-                                    style={{ animationDelay: `${index * 50}ms` }}
-                                >
-                                    {/* Card Header */}
-                                    <div className={`p-5 border-b flex justify-between items-start bg-[#0c0c0e] relative ${isEternalCrown ? 'border-[#00FFC0]/30' : 'border-[#333]'}`}>
-                                        {/* Eternal Crown Glow */}
-                                        {isEternalCrown && (
-                                            <div className="absolute inset-0 bg-[#00FFC0]/5 animate-pulse-slow pointer-events-none"></div>
-                                        )}
-                                        {/* Scanline effect on hover */}
-                                        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none bg-[linear-gradient(transparent_50%,rgba(0,255,192,0.2)_50%)] bg-[length:100%_4px]"></div>
-                                        
-                                        <div className="flex items-center gap-4 relative z-10">
-                                            <div className="relative">
-                                                <img src={casino.logo} alt={casino.name} className={`w-14 h-14 rounded-lg border bg-[#14131c] p-0.5 ${isEternalCrown ? 'border-[#00FFC0]' : 'border-[#333]'}`} />
-                                                {isEternalCrown && (
-                                                    <div className="absolute -top-2 -left-2 text-[#00FFC0] drop-shadow-[0_0_8px_#00FFC0]">
-                                                        <Icons.Gem className="h-5 w-5 fill-[#00FFC0]" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div>
-                                                <h3 className="font-heading text-lg text-white uppercase flex items-center gap-2">
-                                                    {casino.name}
-                                                </h3>
-                                                <div className="flex flex-col gap-1 mt-1">
-                                                    {casino.status === 'VERIFIED' ? (
-                                                        <span className="flex items-center gap-1 text-[9px] font-bold text-[#00FFC0] uppercase tracking-widest">
-                                                            <Icons.CheckCircle className="h-3 w-3" /> VERIFIED
-                                                        </span>
-                                                    ) : (
-                                                        <span className="flex items-center gap-1 text-[9px] font-bold text-[#8d8c9e] uppercase tracking-widest">
-                                                            <Icons.AlertTriangle className="h-3 w-3" /> UNVERIFIED
-                                                        </span>
+                        {loading ? (
+                            Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)
+                        ) : filteredCasinos.length > 0 ? (
+                            filteredCasinos.map((casino, index) => {
+                                const isEternalCrown = casino.specialRanking === 'ETERNAL CROWN';
+                                return (
+                                    <Card 
+                                        key={casino.id} 
+                                        className={`p-0 overflow-hidden bg-[#14131c] group flex flex-col animate-fadeIn relative
+                                            ${isEternalCrown 
+                                                ? 'border-[#00FFC0] shadow-[0_0_30px_rgba(0,255,192,0.15)] hover:shadow-[0_0_50px_rgba(0,255,192,0.3)]' 
+                                                : 'border-[#333] hover:border-[#00FFC0]/50'}`} 
+                                        style={{ animationDelay: `${index * 50}ms` }}
+                                    >
+                                        {/* Card Header */}
+                                        <div className={`p-5 border-b flex justify-between items-start bg-[#0c0c0e] relative ${isEternalCrown ? 'border-[#00FFC0]/30' : 'border-[#333]'}`}>
+                                            {/* Eternal Crown Glow */}
+                                            {isEternalCrown && (
+                                                <div className="absolute inset-0 bg-[#00FFC0]/5 animate-pulse-slow pointer-events-none"></div>
+                                            )}
+                                            {/* Scanline effect on hover */}
+                                            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none bg-[linear-gradient(transparent_50%,rgba(0,255,192,0.2)_50%)] bg-[length:100%_4px]"></div>
+                                            
+                                            <div className="flex items-center gap-4 relative z-10">
+                                                <div className="relative">
+                                                    <img src={casino.logo} alt={casino.name} className={`w-14 h-14 rounded-lg border bg-[#14131c] p-0.5 ${isEternalCrown ? 'border-[#00FFC0]' : 'border-[#333]'}`} />
+                                                    {isEternalCrown && (
+                                                        <div className="absolute -top-2 -left-2 text-[#00FFC0] drop-shadow-[0_0_8px_#00FFC0]">
+                                                            <Icons.Gem className="h-5 w-5 fill-[#00FFC0]" />
+                                                        </div>
                                                     )}
                                                 </div>
+                                                <div>
+                                                    <h3 className="font-heading text-lg text-white uppercase flex items-center gap-2">
+                                                        {casino.name}
+                                                    </h3>
+                                                    <div className="flex flex-col gap-1 mt-1">
+                                                        {casino.status === 'VERIFIED' ? (
+                                                            <span className="flex items-center gap-1 text-[9px] font-bold text-[#00FFC0] uppercase tracking-widest">
+                                                                <Icons.CheckCircle className="h-3 w-3" /> VERIFIED
+                                                            </span>
+                                                        ) : (
+                                                            <span className="flex items-center gap-1 text-[9px] font-bold text-[#8d8c9e] uppercase tracking-widest">
+                                                                <Icons.AlertTriangle className="h-3 w-3" /> UNVERIFIED
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="text-right relative z-10">
+                                                <div className={`flex items-center justify-end gap-1 px-2 py-1 rounded border ${isEternalCrown ? 'bg-[#00FFC0]/10 border-[#00FFC0] text-[#00FFC0]' : 'bg-[#1A1A1A] border-[#333]'}`}>
+                                                    <span className={`font-mono text-xl font-bold ${casino.rating >= 4.5 ? 'text-[#00FFC0] text-glow' : casino.rating >= 4.0 ? 'text-white' : 'text-yellow-500'}`}>
+                                                        {casino.rating.toFixed(1)}
+                                                    </span>
+                                                </div>
+                                                {isEternalCrown && <div className="text-[8px] text-[#00FFC0] font-mono uppercase tracking-widest mt-1 text-right">APEX RANK</div>}
                                             </div>
                                         </div>
-                                        <div className="text-right relative z-10">
-                                            <div className={`flex items-center justify-end gap-1 px-2 py-1 rounded border ${isEternalCrown ? 'bg-[#00FFC0]/10 border-[#00FFC0] text-[#00FFC0]' : 'bg-[#1A1A1A] border-[#333]'}`}>
-                                                <span className={`font-mono text-xl font-bold ${casino.rating >= 4.5 ? 'text-[#00FFC0] text-glow' : casino.rating >= 4.0 ? 'text-white' : 'text-yellow-500'}`}>
-                                                    {casino.rating.toFixed(1)}
-                                                </span>
-                                            </div>
-                                            {isEternalCrown && <div className="text-[8px] text-[#00FFC0] font-mono uppercase tracking-widest mt-1 text-right">APEX RANK</div>}
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Data Grid */}
-                                    <div className="p-5 space-y-4 flex-1 relative">
-                                        <div className="grid grid-cols-2 gap-px bg-[#333] border border-[#333] rounded overflow-hidden">
-                                            <div className="bg-[#14131c] p-3 flex flex-col justify-center">
-                                                <span className="text-[#8d8c9e] text-[9px] font-mono uppercase mb-1 flex items-center gap-1">
-                                                    <Icons.Zap className="h-3 w-3" /> SPEED
-                                                </span>
-                                                <span className="text-white font-heading text-sm truncate" title={casino.withdrawalTime}>{casino.withdrawalTime}</span>
-                                            </div>
+                                        
+                                        {/* Data Grid */}
+                                        <div className="p-5 space-y-4 flex-1 relative">
+                                            <div className="grid grid-cols-2 gap-px bg-[#333] border border-[#333] rounded overflow-hidden">
                                                 <div className="bg-[#14131c] p-3 flex flex-col justify-center">
-                                                <span className="text-[#8d8c9e] text-[9px] font-mono uppercase mb-1 flex items-center gap-1">
-                                                    <Icons.Clock className="h-3 w-3" /> EST.
+                                                    <span className="text-[#8d8c9e] text-[9px] font-mono uppercase mb-1 flex items-center gap-1">
+                                                        <Icons.Zap className="h-3 w-3" /> SPEED
+                                                    </span>
+                                                    <span className="text-white font-heading text-sm truncate" title={casino.withdrawalTime}>{casino.withdrawalTime}</span>
+                                                </div>
+                                                    <div className="bg-[#14131c] p-3 flex flex-col justify-center">
+                                                    <span className="text-[#8d8c9e] text-[9px] font-mono uppercase mb-1 flex items-center gap-1">
+                                                        <Icons.Clock className="h-3 w-3" /> EST.
+                                                    </span>
+                                                    <span className="text-white font-heading text-sm">{casino.established}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span className="text-[#8d8c9e] text-[9px] font-mono uppercase block mb-2 flex items-center gap-1">
+                                                    <Icons.Gift className="h-3 w-3" /> ACTIVE INTEL (BONUS)
                                                 </span>
-                                                <span className="text-white font-heading text-sm">{casino.established}</span>
+                                                <p className="text-sm text-white font-medium leading-tight bg-[#0c0c0e] p-3 rounded border border-[#333] line-clamp-2 min-h-[42px] flex items-center">
+                                                    {casino.bonus}
+                                                </p>
                                             </div>
                                         </div>
-                                        <div>
-                                            <span className="text-[#8d8c9e] text-[9px] font-mono uppercase block mb-2 flex items-center gap-1">
-                                                <Icons.Gift className="h-3 w-3" /> ACTIVE INTEL (BONUS)
-                                            </span>
-                                            <p className="text-sm text-white font-medium leading-tight bg-[#0c0c0e] p-3 rounded border border-[#333] line-clamp-2 min-h-[42px] flex items-center">
-                                                {casino.bonus}
-                                            </p>
+
+                                        {/* Action Footer */}
+                                        <div className="p-5 pt-0 mt-auto relative z-10">
+                                            <Button 
+                                                onClick={() => setViewingCasinoId(casino.id)} 
+                                                className={`w-full font-heading uppercase text-xs tracking-widest shadow-none border ${isEternalCrown ? 'bg-[#00FFC0] text-black border-[#00FFC0] hover:shadow-[0_0_30px_rgba(0,255,192,0.4)]' : 'border-[#00FFC0]/30 hover:shadow-[0_0_20px_rgba(0,255,192,0.2)]'}`}
+                                            >
+                                                ACCESS INTEL UNIT →
+                                            </Button>
                                         </div>
-                                    </div>
-
-                                    {/* Action Footer */}
-                                    <div className="p-5 pt-0 mt-auto relative z-10">
-                                        <Button 
-                                            onClick={() => setViewingCasinoId(casino.id)} 
-                                            className={`w-full font-heading uppercase text-xs tracking-widest shadow-none border ${isEternalCrown ? 'bg-[#00FFC0] text-black border-[#00FFC0] hover:shadow-[0_0_30px_rgba(0,255,192,0.4)]' : 'border-[#00FFC0]/30 hover:shadow-[0_0_20px_rgba(0,255,192,0.2)]'}`}
-                                        >
-                                            ACCESS INTEL UNIT →
-                                        </Button>
-                                    </div>
-                                </Card>
-                            );
-                        })}
+                                    </Card>
+                                );
+                            })
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-64 bg-[#0c0c0e] border border-[#333] rounded-xl p-8 text-center animate-fadeIn lg:col-span-2 xl:col-span-3">
+                                <Icons.SearchX className="h-16 w-16 text-[#333] mb-4" />
+                                <h3 className="font-heading text-xl text-white uppercase mb-2">SIGNAL LOST</h3>
+                                <p className="text-[#8d8c9e] font-mono text-sm max-w-md mx-auto">
+                                    No operators matched your current parameters. Broaden your scan.
+                                </p>
+                                <Button variant="ghost" onClick={() => {setSearchTerm(''); setFilterCategory('ALL'); setMinRating(0); setShowVerifiedOnly(false);}} className="mt-6 text-[#00FFC0] border border-[#00FFC0]/30 hover:bg-[#00FFC0]/10 font-mono uppercase text-xs">
+                                    RESET ALL PARAMETERS
+                                </Button>
+                            </div>
+                        )}
                     </div>
-
-                    {/* Empty State */}
-                    {filteredCasinos.length === 0 && (
-                        <div className="flex flex-col items-center justify-center h-64 bg-[#0c0c0e] border border-[#333] rounded-xl p-8 text-center animate-fadeIn">
-                            <Icons.SearchX className="h-16 w-16 text-[#333] mb-4" />
-                            <h3 className="font-heading text-xl text-white uppercase mb-2">SIGNAL LOST</h3>
-                            <p className="text-[#8d8c9e] font-mono text-sm max-w-md mx-auto">
-                                No operators matched your current parameters. Broaden your scan.
-                            </p>
-                            <Button variant="ghost" onClick={() => {setSearchTerm(''); setFilterCategory('ALL'); setMinRating(0); setShowVerifiedOnly(false);}} className="mt-6 text-[#00FFC0] border border-[#00FFC0]/30 hover:bg-[#00FFC0]/10 font-mono uppercase text-xs">
-                                RESET ALL PARAMETERS
-                            </Button>
-                        </div>
-                    )}
-
                 </div>
             </div>
         </div>

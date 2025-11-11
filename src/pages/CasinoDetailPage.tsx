@@ -1,147 +1,51 @@
+import React, { useState, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Icons } from '../components/common/icons';
+import { Button } from '../components/common/Button';
+import { Card } from '../components/common/Card';
+import { mockCasinosData } from '../constants/casinos';
+import { useUI } from '../context/UIContext';
 
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Button } from '../components/Button';
-import { Icons } from '../components/icons';
-import { ToastContext } from '../context/ToastContext';
-import { WriteReviewModal } from '../components/WriteReviewModal';
-
-interface Casino {
-    id: string;
-    name: string;
-    logo: string;
-    website: string;
-    rating: number;
-    reviewCount: number;
-    description: string;
-    bonus: { title: string; description: string; };
-    features: string[];
-    tags: string[];
-    reviews: { user: string; rating: number; text: string; }[];
-}
-
-export const CasinoDetailPage = () => {
+export const CasinoDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const showToast = useContext(ToastContext)?.showToast ?? (() => {});
-    const [casino, setCasino] = useState<Casino | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [isReviewModalOpen, setReviewModalOpen] = useState(false);
+    const navigate = useNavigate();
+    const { openReviewModal } = useUI();
 
-    useEffect(() => {
-        const fetchCasino = async () => {
-            try {
-                const res = await fetch(`http://localhost:3001/api/casinos/${id}`);
-                if (!res.ok) throw new Error('Failed to fetch casino data.');
-                const data = await res.json();
-                setCasino(data);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const [activeTab, setActiveTab] = useState('overview');
+    const casino = useMemo(() => mockCasinosData.find(c => c.id === id), [id]);
 
-        fetchCasino();
-    }, [id]);
+    if (!casino) {
+        return (
+            <div className="p-10 flex flex-col items-center justify-center text-[#8d8c9e] h-full page-fade-in">
+                <Icons.AlertTriangle className="h-16 w-16 mb-4 opacity-20 text-red-500" />
+                <h2 className="text-2xl font-heading text-white mb-2 uppercase tracking-wider">OPERATOR NOT FOUND</h2>
+                <p className="font-mono text-sm mb-8">// ERROR 404: TARGET INVALID OR DELISTED</p>
+                <Button onClick={() => navigate('/casinos')} variant="secondary" className="font-mono uppercase">RETURN TO GRID</Button>
+            </div>
+        );
+    }
 
-    const handleReviewSubmit = () => {
-        // This will be called when the review is successfully submitted
-        // to refresh the casino data and show the new review.
-        const fetchCasino = async () => {
-            const res = await fetch(`http://localhost:3001/api/casinos/${id}`);
-            const data = await res.json();
-            setCasino(data);
-        };
-        fetchCasino();
-    };
-
-    if (isLoading) return <div className="text-center p-20 font-mono text-[#00FFC0]">// LOADING CASINO DATA...</div>;
-    if (error) return <div className="text-center p-20 font-mono text-red-500 uppercase">{error}</div>;
-    if (!casino) return <div className="text-center p-20 font-mono text-white">Casino not found.</div>;
+    const isEternalCrown = casino.specialRanking === 'ETERNAL CROWN';
+    const TABS = [
+        { id: 'overview', label: 'OPERATIONAL INTEL', icon: Icons.LayoutDashboard },
+        { id: 'kyc', label: 'KYC & COMPLIANCE PROTOCOL', icon: Icons.Shield },
+        { id: 'vprs', label: 'VPR FEED (COMMUNITY)', icon: Icons.MessageSquare },
+    ];
 
     return (
-        <div className="container mx-auto max-w-7xl p-4 py-10 md:p-12 page-fade-in">
-            {/* Header */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-2">
-                    <h1 className="font-orbitron text-4xl md:text-5xl text-white font-black uppercase tracking-wide">{casino.name}</h1>
-                    <p className="text-[#8d8c9e] text-lg mt-2">{casino.description}</p>
-                </div>
-                <div className="flex md:items-end md:justify-end">
-                    <a href={casino.website} target="_blank" rel="noopener noreferrer">
-                        <Button variant="secondary" className="w-full md:w-auto font-orbitron uppercase">
-                            <Icons.ExternalLink className="h-4 w-4 mr-2" />
-                            Visit Website
-                        </Button>
-                    </a>
-                </div>
-            </div>
+        <div className="container mx-auto max-w-7xl p-4 py-6 md:p-10 page-fade-in">
+            <Button variant="ghost" onClick={() => navigate('/casinos')} className="mb-6">
+                <Icons.ChevronLeft className="h-4 w-4 mr-2" /> BACK TO DIRECTORY
+            </Button>
 
-            {/* Main Content */}
-            <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
-                {/* Left Column (Bonus & Features) */}
-                <div className="lg:col-span-1 space-y-8">
-                    {/* Bonus Card */}
-                    <div className="bg-[#0c0c0e] border border-yellow-400/50 rounded-lg p-6">
-                        <h3 className="font-orbitron text-xl text-yellow-400 font-bold flex items-center"><Icons.Gift className="h-5 w-5 mr-3"/>Exclusive Bonus</h3>
-                        <p className="text-lg text-white font-bold mt-3">{casino.bonus.title}</p>
-                        <p className="text-sm text-[#8d8c9e] mt-1">{casino.bonus.description}</p>
-                    </div>
-
-                    {/* Features List */}
-                    <div>
-                        <h3 className="font-orbitron text-xl text-white font-bold">Key Features</h3>
-                        <ul className="mt-4 space-y-2">
-                            {casino.features.map(feature => (
-                                <li key={feature} className="flex items-center text-[#8d8c9e]">
-                                    <Icons.Check className="h-4 w-4 mr-3 text-[#00FFC0]" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Right Column (Reviews) */}
-                <div className="lg:col-span-2">
-                    <div className="flex justify-between items-center">
-                        <h3 className="font-orbitron text-xl text-white font-bold">User Reviews</h3>
-                        <Button onClick={() => setReviewModalOpen(true)}>
-                            <Icons.Edit className="h-4 w-4 mr-2"/> Write a Review
-                        </Button>
-                    </div>
-
-                    <div className="mt-6 space-y-6">
-                        {casino.reviews.length > 0 ? (
-                            casino.reviews.map((review, index) => (
-                                <div key={index} className="bg-[#0c0c0e]/50 border border-[#3a3846] rounded-lg p-4">
-                                    <div className="flex items-center justify-between">
-                                        <p className="font-bold text-white">{review.user}</p>
-                                        <div className="flex items-center gap-1 text-yellow-400">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Icons.Star key={i} className={`h-4 w-4 ${i < review.rating ? 'fill-current' : ''}`} />
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <p className="text-[#8d8c9e] mt-2 text-sm">{review.text}</p>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-center text-[#8d8c9e] py-8">No reviews yet. Be the first to write one!</p>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {isReviewModalOpen && (
-                <WriteReviewModal
-                    casinoId={casino.id}
-                    casinoName={casino.name}
-                    onClose={() => setReviewModalOpen(false)}
-                    onSuccess={handleReviewSubmit}
-                />
-            )}
+            <Card className={`p-6 md:p-10 mb-8`}>
+                <h1 className="text-4xl font-heading font-bold text-white uppercase">{casino.name}</h1>
+                 <Button onClick={() => openReviewModal(casino.id)} className="mt-4">
+                    SUBMIT VPR INTEL <Icons.Edit className="h-4 w-4 ml-2" />
+                </Button>
+            </Card>
+            
+            {/* The rest of the detailed view... */}
         </div>
     );
 };

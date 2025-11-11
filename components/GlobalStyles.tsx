@@ -91,6 +91,15 @@ export const GlobalStyles = () => (
       100% { opacity: 1; clip-path: inset(0 0 0 0); }
     }
 
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
     .animate-depth-in { animation: depthScaleIn 0.5s var(--ease-sleek) forwards; }
     .animate-fade-up { opacity: 0; animation: fadeUp 0.6s var(--ease-sleek) forwards; }
     .animate-pulse-glow { animation: pulseGlow 4s infinite ease-in-out; }
@@ -110,6 +119,12 @@ export const GlobalStyles = () => (
     
     /* Page Load Fade */
     .page-fade-in { animation: depthScaleIn 0.4s var(--ease-sleek) forwards; }
+
+    .animate-shimmer {
+      background: linear-gradient(to right, #2a2a35 4%, #333 25%, #2a2a35 36%);
+      background-size: 1000px 100%;
+      animation: shimmer 2s infinite linear;
+    }
 
     /* Modal Locking */
     body.modal-open { overflow: hidden; padding-right: 5px; /* compensate for scrollbar */ }

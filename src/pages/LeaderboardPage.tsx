@@ -1,75 +1,215 @@
+import React, { useState, useContext } from 'react';
+import { Card } from '../components/Card';
+import { Button } from '../components/Button';
+import { Icons } from '../components/icons';
+import { AppContext } from '../context/AppContext';
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// Mock Data removed
+const MOCK_LEADERBOARD: any[] = [];
 
-interface LeaderboardEntry {
-    username: string;
-    level: number;
-    points: number;
-    profilePicture: string;
-}
+const USER_STATS = {
+    rank: null,
+    handle: "DegenGambler",
+    zp: 1240,
+    vprScore: 4.5,
+    level: 42,
+    tier: "INTEL ANALYST"
+};
+
+const CONTESTS: any[] = [];
 
 export const LeaderboardPage = () => {
-    const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState('');
+    const appContext = useContext(AppContext);
+    const [activeCircuit, setActiveCircuit] = useState<'ZP' | 'XP' | 'VPR'>('ZP');
 
-    useEffect(() => {
-        const fetchLeaderboard = async () => {
-            setIsLoading(true);
-            try {
-                const response = await fetch('http://localhost:3001/leaderboard');
-                if (!response.ok) {
-                    throw new Error('Failed to load leaderboard data.');
-                }
-                const data = await response.json();
-                setLeaderboard(data);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchLeaderboard();
-    }, []);
+    const getRankStyles = (rank: number) => {
+        if (rank === 1) return "bg-yellow-500/10 text-yellow-500 border-yellow-500/50";
+        if (rank === 2) return "bg-gray-300/10 text-gray-300 border-gray-300/50";
+        if (rank === 3) return "bg-amber-700/10 text-amber-600 border-amber-700/50";
+        return "bg-[#1A1A1A] text-[#8d8c9e] border-[#333]";
+    };
 
     return (
-        <div className="container mx-auto max-w-7xl p-4 py-10 md:p-12 page-fade-in">
-            <h1 className="font-orbitron text-4xl md:text-5xl text-white font-black uppercase tracking-wide">LEADERBOARD</h1>
-            <p className="text-[#8d8c9e] text-lg mt-2">The Grid's Top Ranked Operators</p>
-
-            {isLoading && <div className="text-center p-20 font-mono text-[#00FFC0]">// LOADING RANKINGS...</div>}
-            {error && <div className="text-center p-20 font-mono text-red-500 uppercase">{error}</div>}
-
-            {!isLoading && !error && (
-                <div className="mt-12 bg-[#0c0c0e] border border-[#3a3846] rounded-lg">
-                    <table className="w-full text-left">
-                        <thead className="border-b border-[#3a3846]">
-                            <tr>
-                                <th className="p-4 font-heading uppercase text-sm text-white tracking-wider">Rank</th>
-                                <th className="p-4 font-heading uppercase text-sm text-white tracking-wider">Operator</th>
-                                <th className="p-4 font-heading uppercase text-sm text-white tracking-wider text-center">Level</th>
-                                <th className="p-4 font-heading uppercase text-sm text-white tracking-wider text-right">Z-Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {leaderboard.map((user, index) => (
-                                <tr key={user.username} className="border-b border-[#22212b] last:border-b-0 hover:bg-[#1a1923]">
-                                    <td className="p-4 font-orbitron text-2xl text-[#00FFC0] text-glow">{index + 1}</td>
-                                    <td className="p-4">
-                                        <Link to={`/profile/${user.username}`} className="flex items-center gap-4 group">
-                                            <img src={user.profilePicture} alt={user.username} className="w-12 h-12 rounded-full"/>
-                                            <span className="font-bold text-white text-lg group-hover:text-[#00FFC0]">{user.username}</span>
-                                        </Link>
-                                    </td>
-                                    <td className="p-4 font-orbitron text-xl text-white text-center">{user.level}</td>
-                                    <td className="p-4 font-mono text-lg text-white text-right">{user.points.toLocaleString()} ZP</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+        <div className="container mx-auto max-w-6xl p-4 py-6 md:p-10 page-fade-in">
+            
+            {/* HEADER */}
+            <div className="mb-8">
+                <div className="flex items-center gap-3 mb-2">
+                    <Icons.Trophy className="h-8 w-8 text-[#00FFC0] animate-pulse-slow" />
+                    <h1 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-wider">
+                        GLOBAL STANDINGS: <span className="text-[#00FFC0] text-glow">THE TOP SIGNAL</span>
+                    </h1>
                 </div>
-            )}
+                <p className="text-[#00FFC0] font-mono text-sm uppercase tracking-widest ml-11">
+                    // STATUS: LIVE STREAM. TRACK THE ELITE.
+                </p>
+            </div>
+
+            {/* PERSISTENT TRACKING HUD */}
+            <Card className="mb-10 p-6 bg-[#0c0c0e] border-[#00FFC0]/30 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-3 opacity-10">
+                    <Icons.Target className="h-24 w-24 text-[#00FFC0]" />
+                </div>
+                <h2 className="font-heading text-sm text-[#8d8c9e] uppercase mb-4 flex items-center gap-2">
+                    <Icons.Crosshair className="h-4 w-4" /> YOUR CURRENT STANDING
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    <div className="p-4 bg-[#14131c] rounded-lg border border-[#333] flex items-center gap-4">
+                        <img src="https://placehold.co/48x48/00FFC0/000000?text=DG" className="rounded-md border border-[#00FFC0]/50" alt="Profile" />
+                        <div>
+                            <div className="font-heading text-white uppercase">{USER_STATS.handle}</div>
+                            <div className="font-mono text-xs text-[#00FFC0]">{USER_STATS.tier}</div>
+                        </div>
+                    </div>
+                    <div className="p-4 bg-[#14131c] rounded-lg border border-[#333]">
+                        <div className="text-xs text-[#8d8c9e] font-heading uppercase mb-1">GLOBAL RANK</div>
+                        <div className="font-mono text-3xl text-white font-bold">{USER_STATS.rank ? `#${USER_STATS.rank.toLocaleString()}` : 'N/A'}</div>
+                    </div>
+                    <div className="p-4 bg-[#14131c] rounded-lg border border-[#333]">
+                         <div className="text-xs text-[#8d8c9e] font-heading uppercase mb-1">CURRENT ZP STACK</div>
+                        <div className="font-mono text-3xl text-[#00FFC0] font-bold">{USER_STATS.zp.toLocaleString()} ZP</div>
+                    </div>
+                </div>
+            </Card>
+
+            {/* MAIN LAYOUT */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                
+                {/* LEFT: MAIN LEADERBOARD (2/3) */}
+                <div className="xl:col-span-2">
+                    
+                    {/* RANKING CIRCUIT TABS */}
+                    <div className="flex border-b border-[#333] mb-6 overflow-x-auto">
+                        {[
+                            { id: 'ZP', label: 'ZP DOMINANCE', icon: Icons.Zap },
+                            { id: 'XP', label: 'OPERATIONAL MASTERY', icon: Icons.Activity },
+                            { id: 'VPR', label: 'VPR VALIDATOR', icon: Icons.Shield }
+                        ].map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveCircuit(tab.id as any)}
+                                className={`flex items-center gap-2 px-6 py-4 font-heading uppercase text-sm transition-all border-b-2 whitespace-nowrap ${
+                                    activeCircuit === tab.id 
+                                    ? 'border-[#00FFC0] text-white bg-[#00FFC0]/5' 
+                                    : 'border-transparent text-[#8d8c9e] hover:text-white hover:bg-[#14131c]'
+                                }`}
+                            >
+                                <tab.icon className={`h-4 w-4 ${activeCircuit === tab.id ? 'text-[#00FFC0]' : ''}`} />
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* LEADERBOARD TABLE */}
+                    <Card className="p-0 overflow-hidden bg-[#0c0c0e] border-[#333] animate-tabSlideIn">
+                        <div className="overflow-x-auto">
+                           {MOCK_LEADERBOARD.length > 0 ? (
+                            <table className="w-full text-left">
+                                <thead className="bg-[#14131c] border-b border-[#333]">
+                                    <tr>
+                                        <th className="p-4 pl-6 font-heading text-xs text-[#8d8c9e] uppercase tracking-wider">Rank</th>
+                                        <th className="p-4 font-heading text-xs text-[#8d8c9e] uppercase tracking-wider">Handle / Tier</th>
+                                        <th className="p-4 font-heading text-xs text-[#00FFC0] uppercase tracking-wider text-right">Total ZP Stack</th>
+                                        <th className="p-4 font-heading text-xs text-[#8d8c9e] uppercase tracking-wider text-center hidden md:table-cell">VPR Score</th>
+                                        <th className="p-4 pr-6 font-heading text-xs text-[#8d8c9e] uppercase tracking-wider text-right hidden sm:table-cell">Level (XP)</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-[#333]">
+                                    {MOCK_LEADERBOARD.map((entry) => (
+                                        <tr key={entry.rank} className="hover:bg-[#14131c] transition-colors group">
+                                            <td className="p-4 pl-6">
+                                                <div className={`h-8 w-8 rounded-md flex items-center justify-center font-bold font-mono border ${getRankStyles(entry.rank)}`}>
+                                                    {entry.rank <= 3 ? <Icons.Trophy className="h-4 w-4" /> : entry.rank}
+                                                </div>
+                                            </td>
+                                            <td className="p-4">
+                                                <div className="flex items-center gap-3">
+                                                    <img src={`https://placehold.co/32x32/24232d/ffffff?text=${entry.handle.substring(0,1)}`} alt={entry.handle} className="w-8 h-8 rounded-full ring-1 ring-[#333] group-hover:ring-[#00FFC0] transition-all" />
+                                                    <div>
+                                                        <div className={`font-bold ${entry.rank <= 3 ? 'text-white' : 'text-[#8d8c9e] group-hover:text-white'}`}>{entry.handle}</div>
+                                                        <div className="text-[10px] font-mono text-[#666] uppercase">{entry.tier}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="p-4 text-right font-mono text-white font-bold text-lg">
+                                                {entry.zp.toLocaleString()}
+                                            </td>
+                                            <td className="p-4 text-center font-mono text-[#8d8c9e] hidden md:table-cell">
+                                                {entry.vprScore.toFixed(1)}
+                                            </td>
+                                            <td className="p-4 pr-6 text-right font-mono text-[#00FFC0] hidden sm:table-cell">
+                                                LVL {entry.level}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                             ) : (
+                                <div className="text-center py-20 text-[#8d8c9e]">
+                                    <Icons.Trophy className="h-12 w-12 mx-auto mb-4 opacity-50"/>
+                                    <p className="font-mono text-sm">AWAITING LEADERBOARD DATA...</p>
+                                </div>
+                            )}
+                        </div>
+                    </Card>
+                </div>
+
+                {/* RIGHT: CONTEST CIRCUIT (1/3) */}
+                <div className="space-y-6">
+                     <div>
+                        <h2 className="font-heading text-xl text-white mb-4 flex items-center gap-2 uppercase">
+                            <Icons.Flag className="h-5 w-5 text-red-500" /> GLOBAL CONTEST CIRCUIT
+                        </h2>
+                        {CONTESTS.length > 0 ? (
+                            <div className="space-y-4">
+                                {CONTESTS.map(contest => (
+                                    // FIX: Added children to Card component
+                                    <Card key={contest.id} className="p-5 bg-[#14131c] border-[#333] hover:border-[#00FFC0]/50 group">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <h3 className="font-heading text-white text-sm uppercase">{contest.title}</h3>
+                                            <span className="font-mono text-red-400 text-xs bg-red-950/30 px-2 py-1 rounded border border-red-900/50 flex items-center gap-1">
+                                                <Icons.Clock className="h-3 w-3" /> {contest.time}
+                                            </span>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2 mb-4 text-xs font-mono">
+                                            <div className="bg-[#0A0A0A] p-2 rounded border border-[#333]">
+                                                <span className="text-[#8d8c9e] block mb-1">YOUR RANK</span>
+                                                <span className="text-white font-bold">#{contest.rank}</span>
+                                            </div>
+                                            <div className="bg-[#0A0A0A] p-2 rounded border border-[#333]">
+                                                <span className="text-[#8d8c9e] block mb-1">REWARD POOL</span>
+                                                <span className="text-[#00FFC0] font-bold">{contest.pool}</span>
+                                            </div>
+                                        </div>
+                                        <Button className="w-full font-heading uppercase text-xs tracking-wider shadow-[0_0_15px_rgba(0,255,192,0.15)]">
+                                            {contest.action}
+                                        </Button>
+                                    </Card>
+                                ))}
+                            </div>
+                        ) : (
+                             <Card className="p-8 text-center text-[#8d8c9e] border-dashed border-[#333] bg-transparent">
+                                <Icons.Flag className="h-8 w-8 mx-auto mb-2 opacity-50"/>
+                                <p className="font-mono text-sm">NO ACTIVE CONTESTS</p>
+                            </Card>
+                        )}
+                    </div>
+
+                    {/* QUICK LINKS */}
+                    <Card className="p-6 bg-[#0c0c0e] border-[#333]">
+                        <h3 className="font-heading text-white uppercase mb-4 text-sm">REWARD LOG & STATUS</h3>
+                        <div className="space-y-3">
+                            <Button variant="secondary" onClick={() => appContext?.setCurrentPage('Rewards')} className="w-full justify-between text-xs font-mono uppercase group">
+                                VIEW SSP PAYOUT LOG <Icons.ChevronRight className="h-4 w-4 text-[#333] group-hover:text-[#00FFC0]" />
+                            </Button>
+                            <Button variant="secondary" onClick={() => appContext?.setCurrentPage('Knowledge Base')} className="w-full justify-between text-xs font-mono uppercase group">
+                                CONTRIBUTION GUIDE <Icons.ChevronRight className="h-4 w-4 text-[#333] group-hover:text-[#00FFC0]" />
+                            </Button>
+                        </div>
+                    </Card>
+                </div>
+
+            </div>
         </div>
     );
 };

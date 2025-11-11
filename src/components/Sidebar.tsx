@@ -1,4 +1,3 @@
-
 import React, { useContext, createContext } from 'react';
 import { Icons } from './icons';
 import { AppContext } from '../context/AppContext';
@@ -17,14 +16,15 @@ const SidebarContext = createContext<SidebarContextType>({
   isCollapsed: false,
 });
 
-const SidebarLink: React.FC<{ href: string; icon: React.FC<any>; children: React.ReactNode; isMobile?: boolean; onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }> = ({ href, icon: Icon, children, isMobile, onClick, ...props }) => {
+// FIX: Changed 'href' prop to 'path' to match the data structure from sidebarNavItems.
+const SidebarLink: React.FC<{ path: string; icon: React.FC<any>; children: React.ReactNode; isMobile?: boolean; onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }> = ({ path, icon: Icon, children, isMobile, onClick, ...props }) => {
   const { isActive, isCollapsed } = useContext(SidebarContext);
   return (
     <a
-      href={href}
+      href={path}
       onClick={onClick}
       className={`group flex items-center gap-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] font-medium relative overflow-hidden
-      ${isCollapsed ? 'justify-center px-2 py-3' : isMobile ? 'px-5 py-4 text-sm font-orbitron uppercase tracking-wider' : 'px-4 py-3 text-sm'}
+      ${isCollapsed ? 'justify-center px-2 py-3' : isMobile ? 'px-5 py-4 text-sm font-heading uppercase tracking-wider' : 'px-4 py-3 text-sm'}
       ${isActive 
         ? 'text-white bg-[#00FFC0]/5' 
         : 'text-[#8d8c9e] hover:bg-[#1A1A1A] hover:text-white'}`}
@@ -77,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                     <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-[#00FFC0] rounded-full border-4 border-[#0c0c0e]"></div>
                 </div>
                 <div>
-                    <div className="font-orbitron text-white uppercase text-sm tracking-wider">DegenGambler</div>
+                    <div className="font-heading text-white uppercase text-sm tracking-wider">DegenGambler</div>
                     <div className="text-[10px] font-mono text-[#00FFC0] flex items-center gap-2 mt-1">
                         <Icons.Shield className="h-3 w-3" /> LVL 42 OPERATOR
                     </div>
@@ -124,7 +124,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                         {group.items.map((item) => (
                             <SidebarContext.Provider key={item.title} value={{ isActive: appContext?.currentPage === item.title, isCollapsed: false }}>
                                 <SidebarLink
-                                    href={item.href}
+                                    // FIX: Changed 'href' prop to 'path'
+                                    path={item.path}
                                     icon={item.icon}
                                     isMobile={true}
                                     onClick={(e) => handleNavClick(e, item.title)}
@@ -142,7 +143,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
              <div className="shrink-0 p-4 border-t border-[#333] bg-[#0c0c0e] pb-[calc(1rem+env(safe-area-inset-bottom))]">
                 <Button
                     variant="ghost"
-                    className="w-full font-orbitron uppercase text-xs tracking-wider text-[#8d8c9e] hover:text-white border border-[#333] hover:bg-[#1A1A1A] h-11"
+                    className="w-full font-heading uppercase text-xs tracking-wider text-[#8d8c9e] hover:text-white border border-[#333] hover:bg-[#1A1A1A] h-11"
                     onClick={() => setIsMobileOpen(false)}
                 >
                     <Icons.X className="h-4 w-4 mr-2" /> CLOSE TERMINAL
@@ -185,7 +186,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                     {group.items.map((item) => (
                         <SidebarContext.Provider key={item.title} value={{ isActive: appContext?.currentPage === item.title, isCollapsed }}>
                         <SidebarLink
-                            href={item.href}
+                            // FIX: Changed 'href' prop to 'path'
+                            path={item.path}
                             icon={item.icon}
                             onClick={(e) => handleNavClick(e, item.title)}
                         >
@@ -212,7 +214,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                 ) : (
                     <>
                         <Icons.ChevronLeft className="h-5 w-5" />
-                        <span className="font-orbitron uppercase text-xs tracking-wider">COLLAPSE</span>
+                        <span className="font-heading uppercase text-xs tracking-wider">COLLAPSE</span>
                     </>
                 )}
             </Button>

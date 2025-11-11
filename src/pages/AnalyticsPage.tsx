@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { GenericPage } from './GenericPage';
 import { Icons } from '../components/icons';

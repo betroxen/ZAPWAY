@@ -3,95 +3,142 @@ import React from 'react';
 
 export const GlobalStyles = () => (
   <style dangerouslySetInnerHTML={{ __html: `
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;700&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
 
     :root {
-      --font-primary: 'Rajdhani', sans-serif;
-      --font-display: 'Orbitron', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --zap-green: #00FFC0;
+      --bg-dark: #0A0A0A;
+      --bg-card: #14131c;
+      --ease-sleek: cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-      --color-background: #000000;
-      --color-primary: #00FF00;
-      --color-secondary: #00AFFF;
-      --color-text: #E0E0E0;
-      --color-text-dark: #A0A0A0;
-      --color-border: rgba(0, 255, 0, 0.2);
-      --color-background-dark: #080808;
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      background-color: var(--color-background);
-      color: var(--color-text);
-      font-family: var(--font-primary);
+      background-color: var(--bg-dark);
+      color: #FAFBFF;
+      font-family: 'Rajdhani', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
-      
-      /* Animated Gradient Background */
-      background: linear-gradient(45deg, #000000, #001f00, #000000, #001f00);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-
-      /* Scanlines Overlay */
-      position: relative;
+      scrollbar-color: #333333 #0A0A0A;
     }
 
-    body::after {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 255, 0, 0.05),
-        rgba(0, 255, 0, 0.05) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 1000;
-      animation: scanlines 10s linear infinite;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes scanlines {
-      from { transform: translateY(0); }
-      to { transform: translateY(100%); }
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: var(--font-display);
-      color: var(--color-primary);
-      text-shadow: 0 0 5px var(--color-primary), 0 0 10px var(--color-primary), 0 0 15px var(--color-primary);
-    }
-
-    .text-glow {
-      text-shadow: 0 0 5px var(--color-secondary), 0 0 10px var(--color-secondary);
-    }
-    
+    /* === ZAP V5.2 KINETIC SCROLLBAR === */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 5px;
+      height: 5px;
     }
 
     ::-webkit-scrollbar-track {
-      background: var(--color-background-dark);
+      background: transparent;
     }
 
     ::-webkit-scrollbar-thumb {
-      background-color: var(--color-primary);
-      border-radius: 4px;
-      box-shadow: 0 0 5px var(--color-primary);
+      background: #333;
+      border-radius: 10px;
+      transition: background 0.3s ease;
     }
 
-    .font-orbitron {
-        font-family: var(--font-display);
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00FFC0;
+    }
+
+    /* Utility Classes */
+    .font-heading { font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .font-tactical { font-family: 'Rajdhani', sans-serif; font-weight: 500; }
+    .text-glow { text-shadow: 0 0 12px rgba(0, 255, 192, 0.6); }
+    .transition-sleek { transition: all 0.3s var(--ease-sleek); }
+
+    /* V5.1 Kinetic Animations */
+    @keyframes depthScaleIn {
+      0% { opacity: 0; transform: scale(0.98) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 192, 0.1); }
+      50% { box-shadow: 0 0 30px rgba(0, 255, 192, 0.4); }
+    }
+
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    @keyframes movingGrid {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+    
+    @keyframes modalEnter {
+        from { opacity: 0; transform: scale(0.96) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes glitchReveal {
+      0% { opacity: 0; clip-path: inset(50% 0 50% 0); }
+      100% { opacity: 1; clip-path: inset(0 0 0 0); }
+    }
+    
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse-fast {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
+
+    .animate-depth-in { animation: depthScaleIn 0.5s var(--ease-sleek) forwards; }
+    .animate-fade-up { opacity: 0; animation: fadeUp 0.6s var(--ease-sleek) forwards; }
+    .animate-pulse-glow { animation: pulseGlow 4s infinite ease-in-out; }
+    .animate-pulse-slow { animation: pulseGlow 6s infinite ease-in-out; }
+    .animate-scanline { animation: scanline 8s linear infinite; }
+    .animate-moving-grid { animation: movingGrid 10s linear infinite; }
+    .animate-modal-enter { animation: modalEnter 0.4s var(--ease-sleek) forwards; }
+    .animate-glitch-reveal { animation: glitchReveal 0.4s steps(5, end) forwards; }
+    .animate-slideInRight { animation: slideInRight 0.5s var(--ease-sleek) forwards; }
+    .animate-pulse-fast { animation: pulse-fast 0.8s infinite ease-in-out; }
+
+    /* Standard Fade */
+    .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    /* Tab Slide Animation */
+    .animate-tabSlideIn { animation: tabSlideIn 0.4s var(--ease-sleek) forwards; }
+    @keyframes tabSlideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+    
+    /* Page Load Fade */
+    .page-fade-in { animation: depthScaleIn 0.4s var(--ease-sleek) forwards; }
+
+    /* Modal Locking */
+    body.modal-open { overflow: hidden; padding-right: 5px; /* compensate for scrollbar */ }
+    
+    /* Tactical Card Hover Common */
+    .card-hover {
+        transition: all 0.3s var(--ease-sleek);
+    }
+    .card-hover:hover {
+        transform: translateY(-4px);
+        border-color: rgba(0, 255, 192, 0.4);
+        box-shadow: 0 10px 30px -10px rgba(0, 255, 192, 0.2);
     }
   `}} />
 );

@@ -13,7 +13,7 @@ export const FeaturedCasinos = () => {
     <section className="w-full bg-[#000000] py-12 border-y border-[#14131c]">
       <div className="container mx-auto max-w-7xl px-4 mb-8">
         <h2 className="font-heading text-center text-xl md:text-2xl font-bold text-white uppercase tracking-widest opacity-80">
-          Top Rated Casinos
+          Top Rated Operators
         </h2>
       </div>
       <div className="relative w-full overflow-hidden mask-image-lr">
@@ -36,7 +36,7 @@ export const FeaturedCasinos = () => {
               key={index}
               className="mx-6 md:mx-10 flex items-center justify-center select-none"
             >
-              <span className="font-heading text-2xl md:text-3xl font-bold text-white tracking-wider hover:text-[#1ed760] transition-colors duration-300 cursor-default">
+              <span className="font-heading text-2xl md:text-3xl font-bold text-white tracking-wider hover:text-[#00FFC0] transition-colors duration-300 cursor-default">
                 {name}
               </span>
             </div>

@@ -18,10 +18,10 @@ export const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="rounded-lg bg-[#14131c] p-8 transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(29,215,96,0.15)]"
+              className="rounded-lg bg-[#14131c] p-8 transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(0, 255, 192, 0.15)]"
             >
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#1ed760]/10">
-                <feature.icon className="h-6 w-6 text-[#1ed760]" />
+              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#00FFC0]/10">
+                <feature.icon className="h-6 w-6 text-[#00FFC0]" />
               </div>
               <h3 className="font-heading mb-3 text-2xl font-semibold text-white">{feature.title}</h3>
               <p className="text-[#8d8c9e]">{feature.description}</p>

@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useCallback, ReactNode, useContext } from 'react';
 import { Icons } from '../components/icons';
 import { useSound } from './SoundContext';
@@ -19,20 +18,19 @@ export const ToastContext = createContext<ToastContextType | undefined>(undefine
 
 export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const { playSound } = useSound(); // Hook into sound engine
+  const { playSound } = useSound();
 
   const showToast = useCallback((message: string, type: ToastType) => {
     const id = Math.random().toString(36).substring(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
 
-    // Play appropriate sound based on type
     if (type === 'success') playSound('success', 0.3);
     else if (type === 'error') playSound('error', 0.35);
     else playSound('info', 0.25);
 
     setTimeout(() => {
       setToasts((prev) => prev.filter((toast) => toast.id !== id));
-    }, 3500); // slightly longer for better readability
+    }, 3500);
   }, [playSound]);
 
   const removeToast = (id: string) => {
@@ -65,4 +63,13 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       </div>
     </ToastContext.Provider>
   );
+};
+
+// FIX: Add useToast custom hook for consistency and to resolve export error.
+export const useToast = () => {
+    const context = useContext(ToastContext);
+    if (context === undefined) {
+        throw new Error('useToast must be used within a ToastProvider');
+    }
+    return context;
 };

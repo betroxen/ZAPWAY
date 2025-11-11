@@ -1,10 +1,10 @@
-
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { Icons } from './icons';
 import { Button } from './Button';
 import { Input } from './Input';
 import { ToastContext, ToastContextType } from '../context/ToastContext';
 import { mockCasinosData } from '../constants/casinos';
+import { useSound } from '../context/SoundContext';
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -31,6 +31,7 @@ const PRIORITIES = [
 export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initialCasinoId }) => {
   const toastCtx = useContext(ToastContext) as ToastContextType | undefined;
   const showToast = toastCtx?.showToast ?? (() => {});
+  const { playSound } = useSound();
   
   const [currentStep, setCurrentStep] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -135,18 +136,20 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
             <span className="text-xs text-[#8d8c9e] font-mono">FAIL (1)</span>
             <div className="flex gap-1 flex-1 justify-center">
                 {[1, 2, 3, 4, 5].map((val) => (
-                    <Button
+                    <button
                         key={val}
-                        disableSound={true}
-                        onClick={() => handleInputChange(field, val)}
-                        className={`h-10 flex-1 max-w-[50px] rounded-sm font-bold transition-all !p-0
-                            ${formData[field] >= val 
-                            ? 'bg-[#1ed760] border-[#1ed760] text-black shadow-[0_0_10px_rgba(29,215,96,0.3)]' 
+                        onClick={() => {
+                            handleInputChange(field, val);
+                            playSound('click_secondary', 0.1 + (val * 0.05));
+                        }}
+                        className={`h-10 flex-1 max-w-[50px] rounded-sm font-bold transition-all border ${
+                            formData[field] >= val 
+                            ? 'bg-[#00FFC0] border-[#00FFC0] text-black shadow-[0_0_10px_rgba(0,255,192,0.3)]' 
                             : 'bg-[#14131c] border-[#3a3846] text-[#8d8c9e] hover:border-white/30'
                         }`}
                     >
                         {val}
-                    </Button>
+                    </button>
                 ))}
             </div>
             <span className="text-xs text-[#8d8c9e] font-mono">OPTIMAL (5)</span>
@@ -166,7 +169,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
             <div className="flex justify-between items-start mb-6">
                 <div>
                     <h2 className="font-heading text-xl md:text-2xl font-bold text-white flex items-center gap-3 uppercase">
-                        <Icons.Database className="h-6 w-6 text-[#1ed760] animate-pulse" /> 
+                        <Icons.Database className="h-6 w-6 text-[#00FFC0] animate-pulse" /> 
                         ZAP VPR SUBMISSION PROTOCOL
                     </h2>
                     <p className="text-[#00FFC0] font-mono text-xs uppercase tracking-widest mt-1">
@@ -181,22 +184,22 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
             {/* TACTICAL PROGRESS BAR */}
             <div className="mb-2 flex justify-between text-xs font-mono uppercase tracking-wider">
                 {STEPS.map((step, i) => (
-                    <span key={step} className={`${currentStep > i + 1 ? 'text-[#1ed760]' : currentStep === i + 1 ? 'text-white font-bold' : 'text-[#3a3846]'}`}>
+                    <span key={step} className={`${currentStep > i + 1 ? 'text-[#00FFC0]' : currentStep === i + 1 ? 'text-white font-bold' : 'text-[#3a3846]'}`}>
                         [{i + 1}] {step}
                     </span>
                 ))}
             </div>
             <div className="relative h-1.5 bg-[#24232d] rounded-full overflow-hidden">
                 <div 
-                    className="absolute top-0 left-0 h-full bg-[#1ed760] transition-all duration-300 ease-out shadow-[0_0_10px_#1ed760]"
+                    className="absolute top-0 left-0 h-full bg-[#00FFC0] transition-all duration-300 ease-out shadow-[0_0_10px_#00FFC0]"
                     style={{ width: `${(currentStep / STEPS.length) * 100}%` }}
                 />
             </div>
         </div>
 
         {/* MISSION DIRECTIVE */}
-        <div className="bg-[#1ed760]/5 border-b border-[#1ed760]/10 p-3 px-6 text-xs text-[#8d8c9e] font-mono">
-            <strong className="text-[#1ed760]">MISSION DIRECTIVE:</strong> We only accept raw, verifiable data. Subjective noise will be purged by the validation queue.
+        <div className="bg-[#00FFC0]/5 border-b border-[#00FFC0]/10 p-3 px-6 text-xs text-[#8d8c9e] font-mono">
+            <strong className="text-[#00FFC0]">MISSION DIRECTIVE:</strong> We only accept raw, verifiable data. Subjective noise will be purged by the validation queue.
         </div>
 
         {/* SCROLLABLE INTEL AREA */}
@@ -209,7 +212,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
                         <div>
                             <label className="block text-xs font-mono text-[#8d8c9e] uppercase mb-2">Target Operator (The Subject)</label>
                              {selectedCasino ? (
-                                <div className="flex items-center justify-between p-3 bg-[#1ed760]/10 border border-[#1ed760] rounded-md">
+                                <div className="flex items-center justify-between p-3 bg-[#00FFC0]/10 border border-[#00FFC0] rounded-md">
                                     <div className="flex items-center gap-3">
                                         <img src={selectedCasino.logo} alt={selectedCasino.name} className="w-8 h-8 rounded-md" />
                                         <span className="font-bold text-white">{selectedCasino.name}</span>
@@ -269,7 +272,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
                                         onClick={() => handleInputChange('category', cat.value)}
                                         className={`w-full p-3 rounded-md border text-left transition-all ${
                                             formData.category === cat.value 
-                                            ? 'bg-[#1ed760]/10 border-[#1ed760] text-white' 
+                                            ? 'bg-[#00FFC0]/10 border-[#00FFC0] text-white' 
                                             : 'bg-[#0c0c0e] border-[#3a3846] text-[#8d8c9e] hover:border-[#8d8c9e]'
                                         }`}
                                     >
@@ -321,12 +324,12 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
                         </label>
                         <textarea 
                             rows={6}
-                            className="w-full rounded-md border border-[#3a3846] bg-[#0c0c0e] p-4 text-white placeholder:text-[#8d8c9e] focus:outline-none focus:ring-2 focus:ring-[#1ed760] resize-none font-mono text-sm"
+                            className="w-full rounded-md border border-[#3a3846] bg-[#0c0c0e] p-4 text-white placeholder:text-[#8d8c9e] focus:outline-none focus:ring-2 focus:ring-[#00FFC0] resize-none font-mono text-sm"
                             placeholder="STATE THE FACTS: What happened, expected outcome, actual outcome. No emotion, just data. (Min 50 chars)"
                             value={formData.summary}
                             onChange={(e) => handleInputChange('summary', e.target.value)}
                         />
-                        <div className={`text-xs text-right mt-1 ${formData.summary.length < 50 ? 'text-red-500' : 'text-[#1ed760]'}`}>
+                        <div className={`text-xs text-right mt-1 ${formData.summary.length < 50 ? 'text-red-500' : 'text-[#00FFC0]'}`}>
                             {formData.summary.length} / 50 minimum chars
                         </div>
                     </div>
@@ -392,7 +395,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
                                     checked={formData.attestData}
                                     onChange={(e) => handleInputChange('attestData', e.target.checked)}
                                 />
-                                <div className="h-6 w-6 border-2 border-[#3a3846] rounded bg-[#14131c] peer-checked:bg-[#1ed760] peer-checked:border-[#1ed760] transition-all flex items-center justify-center">
+                                <div className="h-6 w-6 border-2 border-[#3a3846] rounded bg-[#14131c] peer-checked:bg-[#00FFC0] peer-checked:border-[#00FFC0] transition-all flex items-center justify-center">
                                     <Icons.CheckCircle className={`h-4 w-4 text-black ${formData.attestData ? 'opacity-100' : 'opacity-0'}`} />
                                 </div>
                             </div>
@@ -414,7 +417,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
                                     checked={formData.attestTerms}
                                     onChange={(e) => handleInputChange('attestTerms', e.target.checked)}
                                 />
-                                <div className="h-6 w-6 border-2 border-[#3a3846] rounded bg-[#14131c] peer-checked:bg-[#1ed760] peer-checked:border-[#1ed760] transition-all flex items-center justify-center">
+                                <div className="h-6 w-6 border-2 border-[#3a3846] rounded bg-[#14131c] peer-checked:bg-[#00FFC0] peer-checked:border-[#00FFC0] transition-all flex items-center justify-center">
                                     <Icons.CheckCircle className={`h-4 w-4 text-black ${formData.attestTerms ? 'opacity-100' : 'opacity-0'}`} />
                                 </div>
                             </div>
@@ -448,7 +451,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, initi
             ) : (
                  <Button 
                     onClick={handleSubmit} 
-                    className="shadow-[0_0_30px_rgba(29,215,96,0.4)] font-heading uppercase tracking-widest py-4 px-6 h-auto text-sm md:text-base"
+                    className="shadow-[0_0_30px_rgba(0,255,192,0.4)] font-heading uppercase tracking-widest py-4 px-6 h-auto text-sm md:text-base"
                     disabled={!formData.attestData || !formData.attestTerms}
                 >
                     <Icons.Zap className="mr-2 h-5 w-5" /> TRANSMIT VPR & ACTIVATE QUEUE

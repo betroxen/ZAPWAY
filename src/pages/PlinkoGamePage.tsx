@@ -1,13 +1,12 @@
-
 import React, { useState, useEffect, useRef, useContext, useMemo, useCallback } from 'react';
-import { AppContext } from '../context/AppContext';
-import { Card } from '../components/Card';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
-import { Icons } from '../components/icons';
-import { ToastContext } from '../context/ToastContext';
-import { ProvablyFairModal } from '../components/ProvablyFairModal';
-import { useSound } from '../context/SoundContext'; // Import audio hook
+import { useNavigate } from 'react-router-dom';
+import { Card } from '../components/common/Card';
+import { Button } from '../components/common/Button';
+import { Input } from '../components/common/Input';
+import { Icons } from '../components/common/icons';
+import { useToast } from '../context/ToastContext';
+import { ProvablyFairModal } from '../components/modals/ProvablyFairModal';
+import { useSound } from '../context/SoundContext';
 
 // --- CONFIGURATION & CONSTANTS ---
 const ROW_OPTIONS = [8, 10, 12, 14, 16];
@@ -60,9 +59,9 @@ interface Peg {
 }
 
 export const PlinkoGamePage = () => {
-    const appContext = useContext(AppContext);
-    const { showToast } = useContext(ToastContext) || { showToast: () => {} };
-    const { playSound } = useSound(); // Audio hook
+    const navigate = useNavigate();
+    const { showToast } = useToast();
+    const { playSound } = useSound();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -86,6 +85,7 @@ export const PlinkoGamePage = () => {
     const animationRef = useRef<number>();
     const multipliers = useMemo(() => MULTIPLIERS[risk][rows], [rows, risk]);
     const lastBucketHitRef = useRef<number | null>(null); // For bucket flash effect
+
 
     // --- INITIALIZE BOARD LAYOUT ---
     useEffect(() => {
@@ -137,6 +137,44 @@ export const PlinkoGamePage = () => {
         }
         pegsRef.current = newPegs;
     };
+
+    // --- ACTION: DROP BALL ---
+    const dropBall = useCallback(() => {
+        if (betAmount > simBalance) {
+            showToast("INSUFFICIENT FUNDS.", "error");
+            setAutoBetActive(false);
+            return;
+        }
+
+        setSimBalance(prev => prev - betAmount);
+        setNonce(prev => prev + 1);
+
+        // PROVABLY FAIR PATH GENERATION
+        // We need 'rows' number of L/R decisions.
+        const path: number[] = [];
+        for (let i = 0; i < rows; i++) {
+            path.push(Math.random() > 0.5 ? 1 : 0);
+        }
+
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const width = canvas.width / (window.devicePixelRatio || 1);
+
+        particlesRef.current.push({
+            id: Math.random().toString(36).substr(2, 9),
+            x: width / 2 + (Math.random() - 0.5) * 10, // Jitter start
+            y: 30,
+            vx: 0,
+            vy: 0,
+            radius: 5,
+            path,
+            currentRow: 0,
+            finished: false,
+            history: []
+        });
+        
+        playSound('plinko_drop');
+    }, [betAmount, simBalance, rows, showToast, playSound]);
 
     // --- MAIN ANIMATION LOOP ---
     useEffect(() => {
@@ -191,14 +229,10 @@ export const PlinkoGamePage = () => {
                 // Flash effect if just hit
                 if (lastBucketHitRef.current === i) {
                      baseColor = [0, 255, 192]; // ZAP Green flash
-                     // Reset flash after one frame (or use a timer for longer flash)
-                     // For simplicity in this loop, we let React state handle the persistent history, 
-                     // and just flash it for a few frames if we tracked hit time.
-                     // Simplified: just brighter if high mult
                 }
 
                 ctx.fillStyle = `rgb(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]})`;
-                // ctx.globalAlpha = 0.2;
+
                 ctx.beginPath();
                 // Rounded rectangle for bucket
                 if (ctx.roundRect) {
@@ -207,7 +241,6 @@ export const PlinkoGamePage = () => {
                     ctx.rect(x - w / 2, bucketY, w, bucketHeight);
                 }
                 ctx.fill();
-                // ctx.globalAlpha = 1;
 
                 // Multiplier Text
                 ctx.fillStyle = mult < 1 ? '#8d8c9e' : '#fff';
@@ -217,95 +250,50 @@ export const PlinkoGamePage = () => {
             });
 
             // 3. Update & Draw Particles
-            particlesRef.current.forEach((p, i) => {
+            particlesRef.current.forEach((p) => {
                 if (p.finished) return;
 
-                // -- PHYSICS SUB-STEP --
-                // Simple guided physics: gravity pulls down, but x velocity is nudged towards the next target peg in the path.
-                
                 p.vy += 0.8 * deltaTime; // Gravity
                 p.vy *= 0.98; // Air resistance Y
                 p.vx *= 0.97; // Air resistance X
                 
                 p.x += p.vx * deltaTime;
                 p.y += p.vy * deltaTime;
-
-                // -- PEG COLLISION & GUIDANCE --
-                // Find the row of pegs we are currently passing
-                // Pegs are generated in order. We can estimate which pegs to check based on Y.
-                // For demo simplicity, we check the pegs in the 'currentRow'
                 
-                const pegSpacingY = (height - 180) / rows; // Approx matching initBoard
-                const startY = 80;
-                const rowY = startY + p.currentRow * pegSpacingY;
-
-                if (p.y >= rowY - p.radius && p.currentRow < rows) {
-                    // We are at the row. Which peg is closest?
-                    // Actually, based on 'path', we know exactly which peg we SHOULD hit.
-                    // Path index matches row index.
-                    
-                    // Simple proximity check for pegs in current row
-                    for (let j = 0; j < pegsRef.current.length; j++) {
-                         const peg = pegsRef.current[j];
-                         // Optimization: only check pegs reasonably close in Y
-                         if (Math.abs(peg.y - p.y) < 20 && Math.abs(peg.x - p.x) < 20) {
-                             const dx = p.x - peg.x;
-                             const dy = p.y - peg.y;
-                             const dist = Math.sqrt(dx*dx + dy*dy);
-                             
-                             if (dist < p.radius + peg.r) {
-                                 // COLLISION!
-                                 peg.lastHit = time; // Trigger pulse
-                                 
-                                 // Calculate predetermined bounce direction
-                                 const direction = p.path[p.currentRow]; // 0 = left, 1 = right
-                                 
-                                 // Force bounce up and to the side
-                                 p.vy = -Math.abs(p.vy) * 0.5 - 2; // Bounce up, lose energy
-                                 
-                                 // Critical: Guided X velocity. 
-                                 // Instead of realistic physics deflection, we ADD velocity in the target direction.
-                                 const guideForce = (Math.random() * 1.5 + 2);
-                                 p.vx += direction === 0 ? -guideForce : guideForce;
-                                 
-                                 // Ensure it doesn't get stuck exactly on top
-                                 p.y = peg.y - (p.radius + peg.r + 1); 
-
-                                 p.currentRow++;
-                                 // Play varied peg hit sound (mocking pitch variety by just using standard for now)
-                                 playSound('plinko_hit', 0.2 + Math.random() * 0.1); 
-                                 break; // handled this row
-                             }
+                for (let j = 0; j < pegsRef.current.length; j++) {
+                     const peg = pegsRef.current[j];
+                     if (Math.abs(peg.y - p.y) < 20 && Math.abs(peg.x - p.x) < 20) {
+                         const dx = p.x - peg.x;
+                         const dy = p.y - peg.y;
+                         const dist = Math.sqrt(dx*dx + dy*dy);
+                         
+                         if (dist < p.radius + peg.r) {
+                             peg.lastHit = time;
+                             const direction = p.path[p.currentRow];
+                             p.vy = -Math.abs(p.vy) * 0.5 - 2;
+                             const guideForce = (Math.random() * 1.5 + 2);
+                             p.vx += direction === 0 ? -guideForce : guideForce;
+                             p.y = peg.y - (p.radius + peg.r + 1); 
+                             p.currentRow++;
+                             playSound('plinko_hit');
+                             break;
                          }
-                    }
+                     }
                 }
 
-                // -- BUCKET COLLISION --
                 if (p.y > bucketY - p.radius) {
                     p.finished = true;
-                    p.y = bucketY - p.radius; // Clamp to bucket top
-                    
-                    // Calculate result based on where it ACTUALLY landed (or use pre-determined if we trust physics)
-                    // For visual accuracy, we use actual X to find bucket.
-                    const pegSpacingX = Math.min(width / (rows + 1 + 2), 45);
-                    const bucketIndex = Math.floor((p.x - (width / 2 - (rows + 1) / 2 * pegSpacingX)) / pegSpacingX);
-                    
-                    // Fallback: use predetermined path sum if physics drifted too far (rare with guiding)
+                    p.y = bucketY - p.radius;
                     const pathSum = p.path.reduce((a, b) => a + b, 0);
-                    const finalIndex = Math.max(0, Math.min(rows, Math.round((p.x - width/2) / pegSpacingX + rows/2))); // Approximate visual bucket
-
-                    // In a real provably fair game, we MUST use the pre-determined path sum.
-                    // The visuals should have guaranteed it landed there.
                     const payoutMult = multipliers[pathSum] || 0;
                     const win = betAmount * payoutMult;
 
                     setSimBalance(prev => prev + win);
                     setHistory(prev => [{ mult: payoutMult, id: p.id }, ...prev].slice(0, 5));
                     lastBucketHitRef.current = pathSum;
-                    playSound('plinko_bucket', 0.5); // Thud/score sound
+                    playSound('plinko_bucket');
                 }
 
-                // -- DRAW TAIL & PARTICLE --
                 p.history.push({x: p.x, y: p.y});
                 if (p.history.length > 20) p.history.shift();
 
@@ -315,7 +303,7 @@ export const PlinkoGamePage = () => {
                 for (let h = 0; h < p.history.length - 1; h++) {
                     const point = p.history[h];
                     const nextPoint = p.history[h+1];
-                    ctx.globalAlpha = h / p.history.length; // Fade tail
+                    ctx.globalAlpha = h / p.history.length;
                     ctx.moveTo(point.x, point.y);
                     ctx.lineTo(nextPoint.x, nextPoint.y);
                 }
@@ -331,65 +319,23 @@ export const PlinkoGamePage = () => {
                 ctx.shadowBlur = 0;
             });
 
-            // Cleanup old particles
             particlesRef.current = particlesRef.current.filter(p => !p.finished || p.y < height + 100);
 
             animationRef.current = requestAnimationFrame(render);
         };
 
-        // Start Loop
         animationRef.current = requestAnimationFrame(render);
         return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
-    }, [multipliers, rows, betAmount, playSound]); // Added playSound to deps if it changes
+    }, [multipliers, rows, betAmount, playSound]);
 
-    // --- ACTION: DROP BALL ---
-    const dropBall = useCallback(() => {
-        if (betAmount > simBalance) {
-            showToast("INSUFFICIENT FUNDS.", "error");
-            setAutoBetActive(false);
-            return;
-        }
-
-        setSimBalance(prev => prev - betAmount);
-        setNonce(prev => prev + 1);
-
-        // PROVABLY FAIR PATH GENERATION
-        // We need 'rows' number of L/R decisions.
-        const path: number[] = [];
-        for (let i = 0; i < rows; i++) {
-            path.push(Math.random() > 0.5 ? 1 : 0);
-        }
-
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const width = canvas.width / (window.devicePixelRatio || 1);
-
-        particlesRef.current.push({
-            id: Math.random().toString(36).substr(2, 9),
-            x: width / 2 + (Math.random() - 0.5) * 10, // Jitter start
-            y: 30,
-            vx: 0,
-            vy: 0,
-            radius: 5,
-            path,
-            currentRow: 0,
-            finished: false,
-            history: []
-        });
-        
-        playSound('plinko_drop', 0.3); // Swoosh sound
-    }, [betAmount, simBalance, rows, showToast, playSound]);
-
-    // --- AUTO-BET HANDLER ---
     useEffect(() => {
         let interval: any;
         if (autoBetActive) {
-            interval = setInterval(dropBall, 250); // 4 drops per second
+            interval = setInterval(dropBall, 250);
         }
         return () => clearInterval(interval);
     }, [autoBetActive, dropBall]);
 
-    // --- HOTKEYS ---
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
             if (e.code === 'Space' && !e.repeat && !pfModalOpen) {
@@ -404,10 +350,9 @@ export const PlinkoGamePage = () => {
     return (
         <div className="container mx-auto max-w-7xl p-4 py-6 md:p-8 page-fade-in min-h-[calc(100vh-8rem)] flex flex-col">
             
-            {/* HEADER NAV & BALANCE */}
              <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div className="flex items-center gap-4">
-                     <Button variant="ghost" onClick={() => appContext?.setCurrentPage('Strategy Sandbox')} className="text-[#8d8c9e] hover:text-white px-0 md:px-4">
+                     <Button variant="ghost" onClick={() => navigate('/strategy-sandbox')} className="text-[#8d8c9e] hover:text-white px-0 md:px-4">
                         <Icons.ChevronLeft className="h-5 w-5 mr-2" /> SANDBOX
                     </Button>
                     <h1 className="font-orbitron text-xl md:text-2xl text-white uppercase tracking-wider flex items-center gap-3">
@@ -436,7 +381,6 @@ export const PlinkoGamePage = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-[600px]">
                 
-                {/* LEFT CONSOLE (3/12) */}
                 <Card className="lg:col-span-3 order-last lg:order-first bg-[#0c0c0e] border-[#333] p-0 flex flex-col h-fit lg:sticky lg:top-24">
                     <div className="p-4 bg-[#14131c] border-b border-[#333] flex justify-between items-center">
                         <span className="font-heading text-xs text-white uppercase tracking-widest flex items-center gap-2">
@@ -445,7 +389,6 @@ export const PlinkoGamePage = () => {
                     </div>
 
                     <div className="p-5 space-y-6">
-                        {/* Bet Amount */}
                         <div>
                             <label className="flex justify-between text-[10px] font-mono text-[#8d8c9e] uppercase mb-2">
                                 <span>Bet Amount</span>
@@ -477,7 +420,6 @@ export const PlinkoGamePage = () => {
                             </div>
                         </div>
 
-                        {/* Risk Level */}
                         <div>
                             <label className="block text-[10px] font-mono text-[#8d8c9e] uppercase mb-2">Risk Protocol</label>
                             <div className="grid grid-cols-3 gap-2 bg-[#14131c] p-1 rounded-md border border-[#333]">
@@ -493,7 +435,6 @@ export const PlinkoGamePage = () => {
                             </div>
                         </div>
 
-                        {/* Row Count */}
                          <div>
                             <label className="block text-[10px] font-mono text-[#8d8c9e] uppercase mb-2">Peg Density</label>
                             <select 
@@ -509,11 +450,9 @@ export const PlinkoGamePage = () => {
 
                     </div>
 
-                    {/* Action Switch */}
                     <div className="p-5 pt-0 mt-auto space-y-3">
                         <Button 
                             onClick={dropBall} 
-                            disableSound={true} // Use custom drop sound instead
                             className="w-full py-6 font-orbitron font-bold uppercase tracking-widest text-lg shadow-[0_0_30px_rgba(0,255,192,0.2)] bg-[#00FFC0] text-black hover:scale-[1.02] active:scale-95 transition-all"
                         >
                             DROP [SPACE]
@@ -528,10 +467,8 @@ export const PlinkoGamePage = () => {
                     </div>
                 </Card>
 
-                {/* RIGHT: GAME CANVAS & HISTORY (9/12) */}
                 <div className="lg:col-span-9 flex flex-col gap-4">
                     
-                    {/* History Bar */}
                     <div className="h-14 bg-[#0c0c0e] rounded-xl border border-[#333] flex items-center px-2 overflow-hidden relative">
                         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#0c0c0e] to-transparent z-10 pointer-events-none"></div>
                         <div className="flex gap-2 overflow-x-auto custom-scrollbar-hidden px-4 w-full justify-end">
@@ -549,7 +486,6 @@ export const PlinkoGamePage = () => {
                         </div>
                     </div>
 
-                    {/* Canvas Container */}
                     <div ref={containerRef} className="flex-1 bg-[#0c0c0e] rounded-xl border border-[#333] relative overflow-hidden min-h-[500px]">
                          <div className="absolute inset-0 opacity-5 bg-[linear-gradient(rgba(0,255,192,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,192,0.1)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
                         <canvas ref={canvasRef} className="w-full h-full relative z-10" />

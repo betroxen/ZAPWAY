@@ -2,18 +2,16 @@ import React from 'react';
 import { HeroSection } from '../sections/HeroSection';
 import { FeaturedCasinos } from '../sections/FeaturedCasinos';
 import { FAQComponent } from '../sections/FAQComponent';
-import { Icons } from '../components/icons';
-import { Card } from '../components/Card';
-import { Button } from '../components/Button';
-import { ProgressBar } from '../components/ProgressBar';
+import { Icons } from '../components/common/icons';
+import { Card } from '../components/common/Card';
+import { Button } from '../components/common/Button';
+import { ProgressBar } from '../components/common/ProgressBar';
+import { useAuth } from '../auth/AuthContext';
+import { useUI } from '../context/UIContext';
 
-interface HomePageProps {
-  onOpenLogin: () => void;
-  onOpenRegister: () => void;
-  isLoggedIn: boolean;
-}
-
-export const HomePage: React.FC<HomePageProps> = ({ onOpenLogin, onOpenRegister, isLoggedIn }) => {
+export const HomePage: React.FC = () => {
+  const { user } = useAuth();
+  const { openLogin, openRegister } = useUI();
   
   React.useEffect(() => {
       window.scrollTo(0, 0);
@@ -22,7 +20,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenLogin, onOpenRegister,
   return (
     <div className="flex flex-col w-full bg-[#0A0A0A] font-tactical overflow-hidden">
       
-      <HeroSection onOpenLogin={onOpenLogin} onOpenRegister={onOpenRegister} isLoggedIn={isLoggedIn} />
+      <HeroSection />
       <FeaturedCasinos />
 
       {/* === SECTION: GRID RECON === */}
@@ -183,9 +181,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenLogin, onOpenRegister,
                   <span className="text-[#00FFC0] text-glow">NOW</span>
               </h2>
               
-              {!isLoggedIn && (
+              {!user && (
                  <Button 
-                    onClick={onOpenRegister} 
+                    onClick={openRegister} 
                     className="w-full sm:w-auto bg-[#00FFC0] text-black hover:bg-white hover:scale-105 font-orbitron font-black uppercase tracking-[0.2em] text-lg md:text-2xl py-6 md:py-8 px-12 md:px-16 shadow-[0_0_60px_rgba(0,255,192,0.5)] transition-all duration-300 animate-pulse-glow rounded-lg"
                 >
                     INITIATE SEQUENCE

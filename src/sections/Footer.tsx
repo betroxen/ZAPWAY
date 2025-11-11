@@ -8,7 +8,8 @@ export const Footer = () => {
   const appContext = useContext(AppContext);
 
   const handleLinkClick = (page: string) => {
-    appContext?.setCurrentPage(page);
+    if(!appContext) return;
+    appContext.setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -45,7 +46,7 @@ export const Footer = () => {
             <button onClick={() => handleLinkClick('Dashboard')} className="flex items-center gap-4 group">
               <ZapLogo />
               <div className="text-left">
-                  <span className="font-orbitron text-3xl font-bold text-white tracking-wider block leading-none group-hover:text-glow transition-all duration-300">ZAP</span>
+                  <span className="font-heading text-3xl font-bold text-white tracking-wider block leading-none group-hover:text-glow transition-all duration-300">ZAP</span>
                   <span className="text-[10px] text-[#00FFC0] font-mono uppercase tracking-[0.4em] opacity-80 group-hover:opacity-100 transition-opacity">COMMAND CENTER</span>
               </div>
             </button>
