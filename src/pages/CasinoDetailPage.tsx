@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { Icons } from '../components/icons';
 import { ToastContext } from '../context/ToastContext';
 import { WriteReviewModal } from '../components/WriteReviewModal';
+import { fetchCasino } from '../services/api';
 
 interface Casino {
     id: string;
@@ -29,11 +30,10 @@ export const CasinoDetailPage = () => {
     const [isReviewModalOpen, setReviewModalOpen] = useState(false);
 
     useEffect(() => {
-        const fetchCasino = async () => {
+        const loadCasino = async () => {
             try {
-                const res = await fetch(`http://localhost:3001/api/casinos/${id}`);
-                if (!res.ok) throw new Error('Failed to fetch casino data.');
-                const data = await res.json();
+                if (!id) return;
+                const data = await fetchCasino(id);
                 setCasino(data);
             } catch (err: any) {
                 setError(err.message);
@@ -42,18 +42,17 @@ export const CasinoDetailPage = () => {
             }
         };
 
-        fetchCasino();
+        loadCasino();
     }, [id]);
 
-    const handleReviewSubmit = () => {
-        // This will be called when the review is successfully submitted
-        // to refresh the casino data and show the new review.
-        const fetchCasino = async () => {
-            const res = await fetch(`http://localhost:3001/api/casinos/${id}`);
-            const data = await res.json();
+    const handleReviewSubmit = async () => {
+        try {
+            if (!id) return;
+            const data = await fetchCasino(id);
             setCasino(data);
-        };
-        fetchCasino();
+        } catch (err: any) {
+            setError(err.message);
+        } 
     };
 
     if (isLoading) return <div className="text-center p-20 font-mono text-[#00FFC0]">// LOADING CASINO DATA...</div>;
@@ -95,7 +94,7 @@ export const CasinoDetailPage = () => {
                         <ul className="mt-4 space-y-2">
                             {casino.features.map(feature => (
                                 <li key={feature} className="flex items-center text-[#8d8c9e]">
-                                    <Icons.Check className="h-4 w-4 mr-3 text-[#00FFC0]" />
+                                    <Icons.Check className="h-4 w-4 mr-2 text-[#00FFC0]" />
                                     {feature}
                                 </li>
                             ))}

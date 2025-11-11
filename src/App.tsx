@@ -11,7 +11,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { MessagesPage } from './pages/MessagesPage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { TournamentsPage } from './pages/TournamentsPage';
-import { CasinoDirectoryPage } from './pages/CasinoDirectoryPage'; // Import CasinoDirectoryPage
+import { CasinoListPage } from './pages/CasinoListPage'; // Import CasinoListPage
 import { CasinoDetailPage } from './pages/CasinoDetailPage'; // Import CasinoDetailPage
 import { ToastProvider } from './context/ToastContext';
 import { SoundProvider } from './context/SoundContext';
@@ -52,7 +52,7 @@ function App() {
                                 {/* Public Routes */}
                                 <Route path="/profile/:username" element={<ProfilePage />} />
                                 <Route path="/leaderboard" element={<LeaderboardPage />} />
-                                <Route path="/casinos" element={<CasinoDirectoryPage />} />
+                                <Route path="/casinos" element={<CasinoListPage />} />
                                 <Route path="/casinos/:id" element={<CasinoDetailPage />} />
 
                                 {/* Protected Routes */}

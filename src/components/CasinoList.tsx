@@ -3,14 +3,14 @@ import React, { useState, useMemo } from 'react';
 import { CasinoCard, Casino } from './CasinoCard';
 import { Icons } from './icons';
 
-interface CasinoListPageProps {
+interface CasinoListProps {
     title: string;
     subtitle: string;
     casinos: Casino[];
     setViewingCasinoId: (id: string | null) => void;
 }
 
-export const CasinoListPage: React.FC<CasinoListPageProps> = ({ title, subtitle, casinos, setViewingCasinoId }) => {
+export const CasinoList: React.FC<CasinoListProps> = ({ title, subtitle, casinos, setViewingCasinoId }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('rating'); // 'rating', 'bonus', 'newest'
 

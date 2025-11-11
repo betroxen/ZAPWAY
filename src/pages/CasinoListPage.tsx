@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icons } from '../components/icons';
+import { fetchCasinos } from '../services/api';
 
 interface Casino {
     id: string;
@@ -13,17 +14,15 @@ interface Casino {
     description: string;
 }
 
-export const CasinoDirectoryPage = () => {
+export const CasinoListPage = () => {
     const [casinos, setCasinos] = useState<Casino[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchCasinos = async () => {
+        const loadCasinos = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/casinos');
-                if (!res.ok) throw new Error('Failed to fetch casino data.');
-                const data = await res.json();
+                const data = await fetchCasinos();
                 setCasinos(data);
             } catch (err: any) {
                 setError(err.message);
@@ -32,12 +31,12 @@ export const CasinoDirectoryPage = () => {
             }
         };
 
-        fetchCasinos();
+        loadCasinos();
     }, []);
 
     return (
         <div className="container mx-auto max-w-7xl p-4 py-10 md:p-12 page-fade-in">
-            <h1 className="font-orbitron text-4xl md:text-5xl text-white font-black uppercase tracking-wide">Casino Directory</h1>
+            <h1 className="font-orbitron text-4xl md:text-5xl text-white font-black uppercase tracking-wide">Casino List</h1>
             <p className="text-[#8d8c9e] text-lg mt-2">Browse our curated and verified list of operators.</p>
 
             {isLoading && <div className="text-center p-20 font-mono text-[#00FFC0]">// SCANNING THE GRID...</div>}
