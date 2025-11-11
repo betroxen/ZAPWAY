@@ -19,8 +19,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Refresh on mount to check for existing session
   useEffect(() => {
+    // FIX: Changed authService.refresh() to authService.getCurrentUser() to match available methods.
     authService
-      .refresh()
+      .getCurrentUser()
       .then(setUser)
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
@@ -32,7 +33,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (data: RegisterData) => {
-    const u = await authService.register(data);
+    // FIX: Pass individual arguments to authService.register instead of a single object.
+    const u = await authService.register(data.username, data.email, data.password);
     setUser(u);
   };
 
@@ -41,6 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const isAdmin = user?.prefs?.role === 'admin'; // Correctly check for role in user preferences
+
   return (
     <AuthContext.Provider
       value={{
@@ -48,7 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         logout,
-        isAdmin: user?.role === 'admin',
+        isAdmin,
         loading,
       }}
     >

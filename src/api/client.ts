@@ -7,6 +7,9 @@ const api = axios.create({
   withCredentials: true, // needed for HttpOnly refresh cookie
 });
 
+// FIX: Removed request interceptor. Appwrite's web SDK manages sessions via HttpOnly cookies, 
+// so manually adding an Authorization header with a token is not necessary for this setup.
+/*
 api.interceptors.request.use(config => {
   const token = authService.getAccessToken();
   if (token) {
@@ -14,6 +17,7 @@ api.interceptors.request.use(config => {
   }
   return config;
 });
+*/
 
 api.interceptors.response.use(
   res => res,

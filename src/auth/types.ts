@@ -1,12 +1,10 @@
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  role: 'user' | 'admin';
-}
+import { Models } from 'appwrite';
 
+export type User = Models.User<Models.Preferences>;
+
+// FIX: Export RegisterData interface to be used in AuthContext
 export interface RegisterData {
-  username: string;
-  email: string;
-  password: string;
+    username: string;
+    email: string;
+    password: string;
 }

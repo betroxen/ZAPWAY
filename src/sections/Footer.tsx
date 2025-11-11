@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import { Icons } from '../components/icons';
 import { AppContext } from '../context/AppContext';
@@ -8,8 +7,7 @@ export const Footer = () => {
   const appContext = useContext(AppContext);
 
   const handleLinkClick = (page: string) => {
-    if(!appContext) return;
-    appContext.setCurrentPage(page);
+    appContext?.setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -108,6 +106,7 @@ export const Footer = () => {
                 <ul className="space-y-3">
                   <FooterLink page="Terms of Service">Terms of Engagement</FooterLink>
                   <FooterLink page="Privacy Policy">Data Privacy</FooterLink>
+                  <FooterLink page="GDPR Rights">GDPR Rights</FooterLink>
                   <FooterLink page="Commercial Disclosure">Commercial Intel</FooterLink>
                    <FooterLink page="Partner Vetting">Vetting Standards</FooterLink>
                 </ul>

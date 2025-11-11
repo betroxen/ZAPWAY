@@ -1,65 +1,65 @@
-import api from '../api/client';
-import { User, RegisterData } from './types';
+import { account, databases, ID, DB_ID, USERS_COL } from '../lib/appwrite';
+import type { User } from './types';
 
-const TOKEN_KEY = 'access_token';
-
-// This is a MOCK service. In a real app, it would make API calls.
 export const authService = {
+  async getCurrentUser(): Promise<User | null> {
+    try {
+      return await account.get();
+    } catch (error) {
+      return null;
+    }
+  },
+
+  // FIX: Add a refresh method that checks for an active session.
+  // This resolves errors where `refresh` was called but not defined.
+  async refresh(): Promise<User | null> {
+    return this.getCurrentUser();
+  },
+
   async login(email: string, password: string): Promise<User> {
-    console.log("Attempting login for:", email);
-    // MOCK API CALL
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const mockUser: User = { id: '1', username: 'DegenGambler', email, role: 'user' };
-            localStorage.setItem(TOKEN_KEY, 'mock_access_token');
-            resolve(mockUser);
-        }, 1000);
-    });
+    await account.createEmailPasswordSession(email, password);
+    return await account.get();
   },
 
-  async register(data: RegisterData): Promise<User> {
-    console.log("Attempting registration for:", data.username);
-    // MOCK API CALL
-     return new Promise((resolve) => {
-        setTimeout(() => {
-            const mockUser: User = { id: '1', username: data.username, email: data.email, role: 'user' };
-            localStorage.setItem(TOKEN_KEY, 'mock_access_token');
-            resolve(mockUser);
-        }, 1000);
-    });
+  async register(username: string, email: string, password: string): Promise<User> {
+    // 1. Create the Appwrite Auth user
+    const newAccount = await account.create(ID.unique(), email, password, username);
+
+    // 2. Log the new user in to create a session required for DB operations
+    await account.createEmailPasswordSession(email, password);
+
+    // 3. Create a corresponding user document in the database
+    // This requires the 'users' collection to have write access for 'users'.
+    try {
+        await databases.createDocument(DB_ID, USERS_COL, newAccount.$id, {
+            email: email,
+            username: username,
+            role: 'USER',
+        });
+    } catch(dbError) {
+        // If DB write fails, clean up the created auth user for consistency
+        // This requires server-side logic and elevated permissions not available here.
+        // For this client-side implementation, we'll log the error.
+        console.error("Error creating user profile in DB. Please configure collection permissions.", dbError);
+        // We can still proceed with the user being logged in.
+    }
+
+    return newAccount;
   },
 
-  async refresh(): Promise<User> {
-     console.log("Attempting to refresh token...");
-     // MOCK REFRESH LOGIC
-     return new Promise((resolve, reject) => {
-         setTimeout(() => {
-            const token = localStorage.getItem(TOKEN_KEY);
-            if (token === 'mock_access_token_expired') {
-                 console.log("Mock refresh failed.");
-                 reject(new Error("Session expired"));
-            } else if (token) {
-                console.log("Mock refresh successful.");
-                const mockUser: User = { id: '1', username: 'DegenGambler', email: 'degen@zap.gg', role: 'user' };
-                resolve(mockUser);
-            }
-            else {
-                 console.log("No token, refresh failed.");
-                 reject(new Error("No active session"));
-            }
-         }, 500);
-     });
+  async logout(): Promise<void> {
+    return await account.deleteSession('current');
   },
 
-  logout() {
-    console.log("Logging out.");
-    localStorage.removeItem(TOKEN_KEY);
-    // In a real app, this would also call an API to invalidate the refresh token.
-    // return api.post('/auth/logout');
-    return Promise.resolve();
+  async exportUserData(userId: string): Promise<any> {
+    return await databases.getDocument(DB_ID, USERS_COL, userId);
   },
 
-  getAccessToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+  async deleteAccount(userId: string): Promise<void> {
+    // This assumes the 'users' collection allows users to delete their own document.
+    await databases.deleteDocument(DB_ID, USERS_COL, userId);
+    // Deleting the auth user account itself requires server-side implementation for security.
+    // Here we will just log the user out.
+    await account.deleteSession('current');
   },
 };
