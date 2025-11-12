@@ -88,15 +88,9 @@ export const PlinkoGamePage = () => {
 
 
     // --- INITIALIZE BOARD LAYOUT ---
-    useEffect(() => {
-        initBoard();
-        // Handle resize
-        const handleResize = () => initBoard();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [rows]);
-
-    const initBoard = () => {
+    // FIX: Wrap initBoard in useCallback to prevent re-creation on every render,
+    // which is better for performance and satisfies exhaustive-deps linting rules.
+    const initBoard = useCallback(() => {
         const canvas = canvasRef.current;
         const container = containerRef.current;
         if (!canvas || !container) return;
@@ -136,7 +130,15 @@ export const PlinkoGamePage = () => {
             }
         }
         pegsRef.current = newPegs;
-    };
+    }, [rows]);
+    
+    useEffect(() => {
+        initBoard();
+        // Handle resize
+        const handleResize = () => initBoard();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [initBoard]);
 
     // --- ACTION: DROP BALL ---
     const dropBall = useCallback(() => {

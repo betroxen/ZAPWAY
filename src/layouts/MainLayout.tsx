@@ -60,8 +60,8 @@ export const MainLayout: React.FC = () => {
                             setIsMobileOpen={setIsMobileNavOpen}
                         />
                         
-                        <div className={`flex flex-1 flex-col min-w-0 w-full transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarCollapsed ? 'md:ml-[72px]' : 'md:ml-64'}`}>
-                            <main key={location.pathname} className="flex-1 w-full bg-[#0A0A0A] pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 animate-depth-in">
+                        <div className={`flex flex-1 flex-col min-w-0 w-full transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarCollapsed ? 'md:ml-[72px]' : 'md:ml-64'} pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0`}>
+                            <main key={location.pathname} className="flex-1 w-full bg-[#0A0A0A] animate-depth-in">
                                 <Outlet />
                             </main>
                             {!hideFooter && <Footer />}
