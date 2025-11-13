@@ -1,19 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authService } from './authService';
-import { User, RegisterData } from './types';
+// FIX: Import types from authService where they are now defined.
+import { authService, User, RegisterData } from './authService';
+// import { User, RegisterData } from './types';
 
-interface AuthContextValue {
+const AuthContext = createContext<{
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   isAdmin: boolean;
   loading: boolean;
-}
+} | undefined>(undefined);
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// FIX: Changed to React.FC to correctly handle children prop.
+export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

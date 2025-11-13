@@ -4,25 +4,7 @@ import { Button } from './Button';
 import { Icons } from './icons';
 import { Tooltip } from './Tooltip';
 
-export interface Casino {
-    id: string;
-    name: string;
-    logo: string;
-    bonus: string;
-    description: string;
-    tags: string[];
-    rating: number;
-    reviewCount: number;
-    withdrawalTime: string;
-    certified: boolean;
-}
-
-interface CasinoCardProps {
-    casino: Casino;
-    onViewDetails: (id: string) => void;
-}
-
-export const CasinoCard: React.FC<CasinoCardProps> = ({ casino, onViewDetails }) => (
+export const CasinoCard = ({ casino, onViewDetails }) => (
     <div className="card-hover flex flex-col bg-[#14131c] rounded-lg border border-[#3a3846] overflow-hidden transition-all duration-300 hover:border-[#1ed760]/50 hover:shadow-[0_0_20px_rgba(29,215,96,0.1)]">
         <div className="p-6">
             <div className="flex items-start justify-between">

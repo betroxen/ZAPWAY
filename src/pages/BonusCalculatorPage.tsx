@@ -6,10 +6,10 @@ import { Icons } from '../components/icons';
 
 export const BonusCalculatorPage = () => {
     // Input States
-    const [deposit, setDeposit] = useState<number | ''>(100);
-    const [bonusPercent, setBonusPercent] = useState<number | ''>(100);
-    const [wagering, setWagering] = useState<number | ''>(35);
-    const [wagerType, setWagerType] = useState<'bonus' | 'deposit_bonus'>('bonus');
+    const [deposit, setDeposit] = useState(100);
+    const [bonusPercent, setBonusPercent] = useState(100);
+    const [wagering, setWagering] = useState(35);
+    const [wagerType, setWagerType] = useState('bonus');
 
     // Analysis State (for kinetic feedback)
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -20,7 +20,7 @@ export const BonusCalculatorPage = () => {
         riskLevel: { text: "AWAITING INPUT", color: "text-[#8d8c9e]", border: "border-[#333]", bg: "bg-[#1A1A1A]", animate: "" }
     });
 
-    const getRiskAnalysis = (wagerVal: number) => {
+    const getRiskAnalysis = (wagerVal) => {
         if (wagerVal > 40) return { text: "HIGH RISK // AGGRESSIVE TERMS", color: "text-red-500", border: "border-red-500", bg: "bg-red-950/20", animate: "animate-pulse" };
         if (wagerVal >= 25) return { text: "MODERATE RISK", color: "text-yellow-500", border: "border-yellow-500", bg: "bg-yellow-950/20", animate: "" };
         return { text: "LOW RISK // OPTIMAL", color: "text-[#00FFC0]", border: "border-[#00FFC0]", bg: "bg-[#00FFC0]/10", animate: "" };

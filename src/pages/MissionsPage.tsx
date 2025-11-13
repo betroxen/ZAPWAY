@@ -1,19 +1,36 @@
-
-import React, { useContext } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Icons } from '../components/icons';
 import { ProgressBar } from '../components/ProgressBar';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
-import { AppContext } from '../context/AppContext';
 
-// --- MOCK DATA REMOVED ---
-const DAILY_MISSIONS: any[] = [];
-const WEEKLY_MISSIONS: any[] = [];
-const MASTERY_MISSIONS: any[] = [];
+// --- MOCK DATA ---
+const DAILY_MISSIONS = [
+    { id: 'd1', title: "DAILY LOGIN SIGNAL", payload: "5 ZP", progress: 100, status: "COMPLETE", action: "CLAIM REWARD" },
+    { id: 'd2', title: "COMMUNITY VOICE", payload: "15 ZP + 5 XP", progress: 33, status: "IN PROGRESS", action: "POST IN ALPHA FEED", path: '/community' },
+    { id: 'd3', title: "INTEL ACQUISITION", payload: "10 ZP", progress: 60, status: "IN PROGRESS", action: "VIEW BONUS PAGES", path: '/bonus-offers' },
+    { id: 'd4', title: "EDGE FINDER AUDIT", payload: "10 ZP", progress: 0, status: "ACTIVE", action: "LAUNCH EDGE FINDER", path: '/strategy-sandbox' },
+];
+
+const WEEKLY_MISSIONS = [
+    { id: 'w1', title: "WEEKLY WAGER CHALLENGE", payload: "50 ZP + 25 XP", progress: 80, status: "IN PROGRESS", action: "VIEW STATS", path: '/analytics' },
+    { id: 'w2', title: "VPR TRANSMISSION", payload: "25 ZP + 50 XP", progress: 50, status: "IN PROGRESS", action: "SUBMIT REPORT", path: '/support' },
+    { id: 'w3', title: "OPERATOR CROSS-REFERENCE", payload: "30 ZP", progress: 0, status: "ACTIVE", action: "COMPARE OPERATORS", path: '/casinos' },
+    { id: 'w4', title: "FORUM ANALYTICS", payload: "15 ZP", progress: 100, status: "COMPLETE", action: "CLAIM REWARD" },
+];
+
+const MASTERY_MISSIONS = [
+    { id: 'm1', title: "ACTIVATE MFA PROTOCOL", payload: "500 XP", status: "IN PROGRESS", action: "ACCESS SECURITY", path: '/settings' },
+    { id: 'm2', title: "SSP WALLET INTEGRATION", payload: "250 ZP + 100 XP", status: "CLAIMED", action: "COMPLETE" },
+    { id: 'm3', title: "FIRST VETO CONTRIBUTION", payload: "1,000 ZP", status: "ACTIVE", action: "N/A" },
+    { id: 'm4', title: "LINK EXTERNAL ACCOUNT", payload: "50 ZP", status: "IN PROGRESS", action: "ACCESS DOSSIER", path: '/profile' },
+];
 
 export const MissionsPage = () => {
-  const appContext = useContext(AppContext);
+  const navigate = useNavigate();
 
+  // FIX: Converted to React.FC to handle `key` prop correctly.
   const MissionCard: React.FC<{ mission: any, isMastery?: boolean }> = ({ mission, isMastery = false }) => {
       const isClaimable = mission.status === 'COMPLETE';
       const isClaimed = mission.status === 'CLAIMED';
@@ -23,7 +40,6 @@ export const MissionsPage = () => {
             ${isClaimable ? 'border-[#00FFC0] shadow-[0_0_15px_rgba(0,255,192,0.15)] bg-[#00FFC0]/5' : 'border-[#333] bg-[#14131c]'}
             ${isClaimed ? 'opacity-50 grayscale' : ''}
         `}>
-            {/* Icon & Title */}
             <div className="flex items-center gap-4 w-full md:w-1/3">
                 <div className={`p-3 rounded-lg flex-shrink-0 ${isClaimable ? 'bg-[#00FFC0] text-black' : 'bg-[#0A0A0A] border border-[#333] text-[#00FFC0]'}`}>
                     {isMastery ? <Icons.Trophy className="h-6 w-6" /> : <Icons.Target className="h-6 w-6" />}
@@ -36,7 +52,6 @@ export const MissionsPage = () => {
                 </div>
             </div>
 
-            {/* Progress */}
             {!isMastery && mission.progress !== undefined && (
                 <div className="w-full md:flex-1">
                     <div className="flex justify-between text-xs font-mono text-[#8d8c9e] mb-1.5 uppercase">
@@ -54,7 +69,6 @@ export const MissionsPage = () => {
                 </div>
             )}
 
-            {/* Action Button */}
             <div className="w-full md:w-auto flex-shrink-0">
                 {isClaimable ? (
                     <Button className="w-full animate-pulse-glow font-heading uppercase tracking-wider shadow-[0_0_20px_rgba(0,255,192,0.3)]">
@@ -69,11 +83,7 @@ export const MissionsPage = () => {
                         variant="secondary" 
                         className="w-full font-mono uppercase text-xs border-[#333] hover:border-[#00FFC0]/50"
                         disabled={mission.action === 'N/A'}
-                        onClick={() => {
-                            if (mission.title.includes('MFA')) appContext?.setCurrentPage('Command Console');
-                            if (mission.title.includes('LINK')) appContext?.setCurrentPage('Profile');
-                            if (mission.title.includes('ALPHA')) appContext?.setCurrentPage('Alpha Feed');
-                        }}
+                        onClick={() => mission.path && navigate(mission.path)}
                     >
                         {mission.action}
                     </Button>
@@ -92,8 +102,6 @@ export const MissionsPage = () => {
 
   return (
     <div className="container mx-auto max-w-6xl p-4 py-6 md:p-10 page-fade-in">
-        
-        {/* HEADER & HUD */}
         <div className="mb-10">
             <div className="flex items-center gap-3 mb-6">
                 <Icons.Target className="h-8 w-8 text-[#00FFC0] animate-pulse-slow" />
@@ -101,8 +109,6 @@ export const MissionsPage = () => {
                     ZAP MISSION PROTOCOL: <span className="text-[#00FFC0] text-glow">ASSET ACQUISITION</span>
                 </h1>
             </div>
-
-            {/* PERSISTENT TARGET ACQUISITION HUD */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#0c0c0e] p-4 rounded-xl border border-[#333]">
                 <div className="flex items-center gap-4 p-4 bg-[#14131c] rounded-lg border border-[#333]">
                     <div className="p-3 bg-[#00FFC0]/10 rounded-full">
@@ -115,7 +121,7 @@ export const MissionsPage = () => {
                         </div>
                         <ProgressBar progress={85} className="h-2.5" />
                     </div>
-                    <Button variant="ghost" size="icon" className="hidden md:flex text-[#8d8c9e] hover:text-white" onClick={() => appContext?.setCurrentPage('Profile')}>
+                    <Button variant="ghost" size="icon" className="hidden md:flex text-[#8d8c9e] hover:text-white" onClick={() => navigate('/profile')}>
                         <Icons.ChevronRight className="h-5 w-5" />
                     </Button>
                 </div>
@@ -131,7 +137,6 @@ export const MissionsPage = () => {
             </div>
         </div>
 
-        {/* CIRCUIT I: DAILY */}
         <section className="mb-12">
             <h2 className="font-heading text-xl text-white mb-4 flex items-center gap-2 uppercase tracking-wider">
                 <span className="text-[#00FFC0]">I //</span> DAILY INITIATIVES <span className="text-xs text-[#8d8c9e] ml-2 font-mono normal-case opacity-70">// Resets 00:00 UTC</span>
@@ -145,7 +150,6 @@ export const MissionsPage = () => {
             )}
         </section>
 
-        {/* CIRCUIT II: WEEKLY */}
         <section className="mb-12">
             <h2 className="font-heading text-xl text-white mb-4 flex items-center gap-2 uppercase tracking-wider">
                  <span className="text-[#00FFC0]">II //</span> WEEKLY DEPLOYS <span className="text-xs text-[#8d8c9e] ml-2 font-mono normal-case opacity-70">// Resets Sunday</span>
@@ -159,7 +163,6 @@ export const MissionsPage = () => {
             )}
         </section>
 
-        {/* CIRCUIT III: MASTERY */}
         <section className="mb-16">
             <h2 className="font-heading text-xl text-white mb-4 flex items-center gap-2 uppercase tracking-wider">
                  <span className="text-[#00FFC0]">III //</span> PROTOCOL MASTERY <span className="text-xs text-[#8d8c9e] ml-2 font-mono normal-case opacity-70">// One-time High Value Targets</span>
@@ -173,16 +176,14 @@ export const MissionsPage = () => {
             )}
         </section>
 
-        {/* FOOTER LINKS */}
         <div className="border-t border-[#333] pt-8 flex flex-wrap gap-4 justify-center md:justify-start">
-            <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]" onClick={() => appContext?.setCurrentPage('Rewards')}>
+            <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]" onClick={() => navigate('/rewards')}>
                 VIEW PAYOUT HISTORY LOG <Icons.ArrowRight className="h-4 w-4 ml-2" />
             </Button>
-            <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]" onClick={() => appContext?.setCurrentPage('Rewards')}>
+            <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]" onClick={() => navigate('/rewards')}>
                 ACCESS ZAP POINTS STORE <Icons.ArrowRight className="h-4 w-4 ml-2" />
             </Button>
         </div>
-
     </div>
   );
 };

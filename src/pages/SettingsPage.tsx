@@ -1,16 +1,14 @@
-
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Toggle } from '../components/Toggle';
 import { Icons } from '../components/icons';
-import { ToastContext, ToastContextType } from '../context/ToastContext';
+import { useToast } from '../context/ToastContext';
 import { useSound } from '../context/SoundContext';
 
 export const SettingsPage = () => {
-    const toastCtx = useContext(ToastContext) as ToastContextType | undefined;
-    const showToast = toastCtx?.showToast ?? (() => {});
+    const { showToast } = useToast();
     const { isMuted, setMuted, playSound } = useSound();
 
     // 01. PROFILE BLUEPRINT
@@ -33,8 +31,8 @@ export const SettingsPage = () => {
     const [walletAddress, setWalletAddress] = useState('0x742d35Cc6634C0532925a3b8D...');
 
     // 05. USER PREFERENCES
-    const [aestheticMode, setAestheticMode] = useState<'dark' | 'light'>('dark');
-    const [dataViewFormat, setDataViewFormat] = useState<'decimal' | 'percentage'>('percentage');
+    const [aestheticMode, setAestheticMode] = useState('dark');
+    const [dataViewFormat, setDataViewFormat] = useState('percentage');
     const [language, setLanguage] = useState('en-US');
 
     // 06. INTEL COMM CHANNEL
@@ -74,13 +72,13 @@ export const SettingsPage = () => {
     };
 
 
-    const SectionHeader = ({ title, icon: Icon }: { title: string, icon: React.FC<any> }) => (
+    const SectionHeader = ({ title, icon: Icon }: { title: string, icon: React.ElementType }) => (
         <h2 className="font-heading text-xl text-white mb-6 flex items-center gap-3 uppercase tracking-wider border-b border-[#3a3846] pb-3">
             <Icon className="h-5 w-5 text-[#00FFC0]" /> {title}
         </h2>
     );
 
-    const ProTip = ({ children }: { children?: React.ReactNode }) => (
+    const ProTip: React.FC = ({ children }) => (
         <div className="mt-4 p-3 bg-[#00FFC0]/5 border-l-2 border-[#00FFC0] text-xs text-[#8d8c9e] font-mono leading-relaxed">
             <strong className="text-[#00FFC0] uppercase">PRO TIP:</strong> {children}
         </div>

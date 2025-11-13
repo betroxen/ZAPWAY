@@ -1,16 +1,16 @@
 
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Toggle } from '../components/Toggle';
 import { Icons } from '../components/icons';
-import { AppContext } from '../context/AppContext';
-import { ToastContext } from '../context/ToastContext';
+import { useToast } from '../context/ToastContext';
 
 export const SupportPage = () => {
-    const appContext = useContext(AppContext);
-    const { showToast } = useContext(ToastContext) || { showToast: () => {} };
+    const navigate = useNavigate();
+    const { showToast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
 
     // Form State
@@ -28,12 +28,12 @@ export const SupportPage = () => {
         attestTc: false
     });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!formData.attestData || !formData.attestTc) {
              showToast("TRANSMISSION FAILED: Mandatory attestations required.", "error");
@@ -60,7 +60,6 @@ export const SupportPage = () => {
 
   return (
     <div className="container mx-auto max-w-6xl p-4 py-10 md:p-12 page-fade-in">
-        {/* HEADER & MANIFESTO */}
         <div className="mb-12">
             <div className="flex items-center gap-3 mb-4">
                 <Icons.Activity className="h-10 w-10 text-[#00FFC0] animate-pulse-slow" />
@@ -83,7 +82,6 @@ export const SupportPage = () => {
                     <p className="text-[#8d8c9e] text-lg leading-relaxed mb-6">
                         Operators, the Grid runs on precision—downtime is the enemy. Our Diagnostic Console delivers rapid, fortified support. We're not gatekeepers; we're your tactical relay. Self-serve first for lightning strikes, or transmit a direct signal for heavy ordnance. Stay sharp: Complete intel accelerates orbits. Incomplete signals? They drift to the void.
                     </p>
-                    {/* QUICK-START GRID */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {[
                             { icon: Icons.Activity, title: "SCORE GLITCH?", action: "RTP GUIDE" },
@@ -103,7 +101,6 @@ export const SupportPage = () => {
             </Card>
         </div>
 
-        {/* 01 // INTEL CIRCUIT & PROTOCOL ACCESS */}
         <section className="mb-16">
             <h2 className="font-heading text-2xl text-white mb-8 flex items-center gap-3 border-b border-[#333] pb-4">
                 <span className="text-[#00FFC0]">01 //</span> INTEL CIRCUIT & PROTOCOL ACCESS (Self-Serve Arsenal)
@@ -113,7 +110,7 @@ export const SupportPage = () => {
                     <Icons.BookOpen className="h-8 w-8 text-[#00FFC0] mb-4" />
                     <h3 className="font-heading text-base text-white mb-2">KNOWLEDGE BASE</h3>
                     <p className="text-xs text-[#8d8c9e] mb-6 flex-1">Raw Data Library on ZAP mechanics, score pillars, and vetting blueprints.</p>
-                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px]" onClick={() => appContext?.setCurrentPage('Knowledge Base')}>
+                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px]" onClick={() => navigate('/knowledge-base')}>
                         ACCESS LIBRARY →
                     </Button>
                 </Card>
@@ -121,7 +118,7 @@ export const SupportPage = () => {
                     <Icons.Shield className="h-8 w-8 text-blue-500 mb-4" />
                     <h3 className="font-heading text-base text-white mb-2">RESPONSIBLE GAMING</h3>
                     <p className="text-xs text-[#8d8c9e] mb-6 flex-1">Fortified tools for discipline—timers, loss thresholds, and Unplug maneuvers.</p>
-                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px] hover:border-blue-500" onClick={() => appContext?.setCurrentPage('Responsible Gaming')}>
+                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px] hover:border-blue-500" onClick={() => navigate('/responsible-gaming')}>
                         VIEW PROTOCOLS →
                     </Button>
                 </Card>
@@ -129,7 +126,7 @@ export const SupportPage = () => {
                     <Icons.FileText className="h-8 w-8 text-purple-500 mb-4" />
                     <h3 className="font-heading text-base text-white mb-2">LEGAL MANIFESTO</h3>
                     <p className="text-xs text-[#8d8c9e] mb-6 flex-1">Ironclad dossiers: Terms, Privacy, and Commercial Disclosure.</p>
-                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px] hover:border-purple-500" onClick={() => appContext?.setCurrentPage('Terms of Service')}>
+                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px] hover:border-purple-500" onClick={() => navigate('/terms-of-service')}>
                         VIEW FILES →
                     </Button>
                 </Card>
@@ -137,19 +134,17 @@ export const SupportPage = () => {
                     <Icons.Users className="h-8 w-8 text-yellow-500 mb-4" />
                     <h3 className="font-heading text-base text-white mb-2">PARTNERSHIP ARCHIVE</h3>
                     <p className="text-xs text-[#8d8c9e] mb-6 flex-1">Operator synergy docs, referral blueprints, and revenue loop APIs.</p>
-                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px] hover:border-yellow-500" onClick={() => appContext?.setCurrentPage('Affiliate')}>
+                    <Button variant="secondary" className="w-full font-mono uppercase text-[10px] hover:border-yellow-500" onClick={() => navigate('/affiliate')}>
                         ACCESS ARCHIVE →
                     </Button>
                 </Card>
             </div>
         </section>
 
-        {/* 02 // DIRECT COMMUNICATION */}
         <section id="ticket-system" className="mb-16">
              <h2 className="font-heading text-2xl text-white mb-8 flex items-center gap-3 border-b border-[#333] pb-4">
                 <span className="text-[#00FFC0]">02 //</span> DIRECT COMMUNICATION: LINE ACTIVATION
             </h2>
-
             <Card className="p-0 overflow-hidden border-[#00FFC0]/30 bg-[#0A0A0A] shadow-2xl">
                 <div className="bg-[#0c0c0e] p-4 border-b border-[#333] flex items-center justify-between">
                     <span className="font-mono text-sm text-[#00FFC0] uppercase tracking-widest flex items-center gap-3">
@@ -160,14 +155,11 @@ export const SupportPage = () => {
                         SIGNAL STATUS: READY TO TRANSMIT
                     </span>
                 </div>
-                
                 <div className="p-6 md:p-10">
                     <p className="text-[#8d8c9e] mb-10 border-l-4 border-[#00FFC0] pl-4 py-3 bg-[#00FFC0]/5 font-mono text-sm leading-relaxed">
                         <strong className="text-[#00FFC0] font-heading uppercase">MISSION DIRECTIVE:</strong> Channel your intel with surgical clarity. Our vanguard team prioritizes fortified signals. Vague transmissions queue longer.
                     </p>
-
                     <form onSubmit={handleSubmit} className="space-y-10">
-                        {/* SENDER INTEL */}
                         <div>
                             <h3 className="text-white font-heading uppercase text-sm mb-6 flex items-center gap-2">
                                 <Icons.Users className="h-4 w-4 text-[#8d8c9e]" /> SENDER'S INTEL (The Source)
@@ -187,8 +179,6 @@ export const SupportPage = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* THE SIGNAL */}
                          <div>
                             <h3 className="text-white font-heading uppercase text-sm mb-6 flex items-center gap-2">
                                 <Icons.Activity className="h-4 w-4 text-[#8d8c9e]" /> THE SIGNAL (Core Issue)
@@ -222,8 +212,6 @@ export const SupportPage = () => {
                                 <Input name="subject" required maxLength={100} placeholder="CONCISE VECTOR (MAX 100 CHARS)..." value={formData.subject} onChange={handleInputChange} className="font-mono" />
                             </div>
                         </div>
-
-                        {/* RAW DATA CONTRACT */}
                         <div>
                             <h3 className="text-white font-heading uppercase text-sm mb-6 flex items-center gap-2">
                                 <Icons.Database className="h-4 w-4 text-[#8d8c9e]" /> THE RAW DATA CONTRACT (Verification Payload)
@@ -255,8 +243,6 @@ export const SupportPage = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* ATTESTATION */}
                          <div className="bg-[#0c0c0e] p-6 rounded-lg border border-[#333]">
                             <h3 className="text-[#00FFC0] font-heading uppercase text-sm mb-4 flex items-center gap-2">
                                 <Icons.Lock className="h-4 w-4" /> DATA ATTESTATION (MANDATORY CHECKPOINT)
@@ -277,8 +263,6 @@ export const SupportPage = () => {
                                 />
                             </div>
                         </div>
-
-                        {/* SUBMIT & TIMELINES */}
                         <div className="pt-4">
                             <Button 
                                 type="submit" 
@@ -304,13 +288,11 @@ export const SupportPage = () => {
                                 <span className="text-white font-mono font-bold">&lt; 4 HOURS</span>
                             </div>
                         </div>
-
                     </form>
                 </div>
             </Card>
         </section>
 
-        {/* 03 // FAQ FIREWALL */}
         <section className="mb-16">
             <h2 className="font-heading text-2xl text-white mb-8 flex items-center gap-3 border-b border-[#333] pb-4">
                 <span className="text-[#00FFC0]">03 //</span> FAQ FIREWALL: PREEMPTIVE STRIKES
@@ -339,7 +321,6 @@ export const SupportPage = () => {
             </Card>
         </section>
 
-        {/* FOOTER NOTES */}
         <div className="text-center text-xs text-[#666] font-mono uppercase space-y-2">
             <p>
                 <strong className="text-red-900">NOTE: ABUSE COUNTERMEASURES ACTIVE.</strong> Misuse of CRITICAL priority triggers deprioritization.
@@ -348,7 +329,6 @@ export const SupportPage = () => {
                 HQ RELAY: Premier Business Centre, Mutsamudu, Comoros. GLOBAL OPS, UNBREAKABLE UPTIME.
             </p>
         </div>
-
     </div>
   );
 };

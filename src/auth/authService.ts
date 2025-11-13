@@ -1,5 +1,19 @@
-import api from '../api/client';
-import { User, RegisterData } from './types';
+// FIX: Removed unused 'api' import.
+// import { User, RegisterData } from './types';
+
+// FIX: Added type definitions locally to resolve module error.
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
+
+export interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+}
 
 const TOKEN_KEY = 'access_token';
 
@@ -59,7 +73,7 @@ export const authService = {
     return Promise.resolve();
   },
 
-  getAccessToken(): string | null {
+  getAccessToken() {
     return localStorage.getItem(TOKEN_KEY);
   },
 };

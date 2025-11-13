@@ -1,12 +1,8 @@
+
 import React from 'react';
 import { Icons } from './icons';
 
-interface ZapLogoProps {
-  className?: string;
-  iconClassName?: string;
-}
-
-export const ZapLogo: React.FC<ZapLogoProps> = ({
+export const ZapLogo = ({
   className = "p-3 rounded-xl",
   iconClassName = "h-8 w-8"
 }) => {

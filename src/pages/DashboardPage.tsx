@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/Card';
@@ -9,9 +7,8 @@ import { Icons } from '../components/icons';
 import { Toggle } from '../components/Toggle';
 import { mockCasinosData } from '../constants/casinos';
 
-// Mock Data for a lively dashboard
 const ALPHA_FEED = [
-    { id: 1, type: 'PRIORITY', text: 'VPR VALIDATED: Duel.com payout delay confirmed. Score impacted.', time: '2m ago', icon: Icons.AlertTriangle },
+    { id: 1, type: 'PRIORITY', text: 'VPR VALIDATED: Stake.com withdrawal delay confirmed. Score impacted.', time: '2m ago', icon: Icons.AlertTriangle },
     { id: 2, type: 'STANDARD', text: 'New Mission Available: "RTP Hunter" (50 ZP)', time: '15m ago', icon: Icons.Target },
     { id: 3, type: 'STANDARD', text: 'Community Veto initiated against "ShadyBet".', time: '1h ago', icon: Icons.Gavel },
     { id: 4, type: 'SYSTEM', text: 'SSP Reward Pool adjusted: +2.4% APY.', time: '3h ago', icon: Icons.Settings },
@@ -77,7 +74,7 @@ export const DashboardPage = () => {
     return (
         <div className="container mx-auto max-w-[1400px] p-4 py-6 md:p-8 page-fade-in">
             
-            <div className="sticky top-16 z-20 bg-[#0A0A0A]/80 backdrop-blur-md py-4 mb-6 border-b border-[#333] flex flex-col md:flex-row justify-between items-start md:items-center -mx-4 px-4 md:-mx-8 md:px-8">
+            <div className="sticky top-16 z-20 bg-[#121212]/80 backdrop-blur-md py-4 mb-6 border-b border-[#333] flex flex-col md:flex-row justify-between items-start md:items-center -mx-4 px-4 md:-mx-8 md:px-8">
                 <div>
                     <h1 className="font-heading text-2xl md:text-3xl text-white uppercase tracking-wider">
                         WELCOME BACK, <span className="text-[#00FFC0] text-glow">DEGENGAMBLER</span>
@@ -121,7 +118,7 @@ export const DashboardPage = () => {
                     <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity"><Icons.Database className="w-16 h-16 text-purple-500"/></div>
                     <p className="text-xs text-[#8d8c9e] font-heading uppercase tracking-widest mb-1">VPRs LOGGED</p>
                     <p className="font-mono text-3xl text-white font-bold tracking-tight">12</p>
-                    <button className="text-xs text-[#8d8c9e] hover:text-[#00FFC0] font-mono mt-2 flex items-center uppercase transition-colors">
+                    <button onClick={() => navigate('/profile')} className="text-xs text-[#8d8c9e] hover:text-[#00FFC0] font-mono mt-2 flex items-center uppercase transition-colors">
                         [VIEW LOG] <Icons.ChevronRight className="w-3 h-3 ml-1" />
                     </button>
                 </Card>
@@ -251,15 +248,19 @@ export const DashboardPage = () => {
                             <Icons.Settings className="h-5 w-5 text-[#8d8c9e]" /> QUICK COMMS
                         </h2>
                         <div className="divide-y divide-[#333]">
+                            {/* FIX: Added empty description prop to satisfy component's prop requirements. */}
                              <Toggle 
                                 checked={quickAesthetic} 
                                 onChange={setQuickAesthetic} 
                                 label={<span className="text-sm font-mono text-[#8d8c9e] uppercase">DARK OPS MODE</span>}
+                                description=""
                             />
+                            {/* FIX: Added empty description prop to satisfy component's prop requirements. */}
                              <Toggle 
                                 checked={quickData} 
                                 onChange={setQuickData} 
                                 label={<span className="text-sm font-mono text-[#8d8c9e] uppercase">DATA: PERCENTAGE</span>}
+                                description=""
                             />
                         </div>
                         <Button 

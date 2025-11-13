@@ -1,17 +1,18 @@
+
 import React from 'react';
 import { HeroSection } from '../sections/HeroSection';
 import { FeaturedCasinos } from '../sections/FeaturedCasinos';
 import { FAQComponent } from '../sections/FAQComponent';
-import { Icons } from '../components/common/icons';
-import { Card } from '../components/common/Card';
-import { Button } from '../components/common/Button';
-import { ProgressBar } from '../components/common/ProgressBar';
+import { Icons } from '../components/icons';
+import { Card } from '../components/Card';
+import { Button } from '../components/Button';
+import { ProgressBar } from '../components/ProgressBar';
 import { useAuth } from '../auth/AuthContext';
 import { useUI } from '../context/UIContext';
 
-export const HomePage: React.FC = () => {
+export const HomePage = () => {
   const { user } = useAuth();
-  const { openLogin, openRegister } = useUI();
+  const { openRegister } = useUI();
   
   React.useEffect(() => {
       window.scrollTo(0, 0);
@@ -23,7 +24,6 @@ export const HomePage: React.FC = () => {
       <HeroSection />
       <FeaturedCasinos />
 
-      {/* === SECTION: GRID RECON === */}
       <section className="py-20 md:py-32 relative">
           <div className="container mx-auto max-w-7xl px-4 relative z-10">
               
@@ -35,7 +35,6 @@ export const HomePage: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-24 md:mb-32">
-                  {/* Old Way */}
                   <div className="bg-[#14131c]/60 border-l-4 border-red-900/50 rounded-r-xl p-6 md:p-10 backdrop-blur-sm">
                       <h3 className="font-orbitron text-red-500 uppercase text-2xl md:text-3xl mb-8 flex items-center gap-3 tracking-widest font-bold">
                           <Icons.XCircle className="h-8 w-8 md:h-10 md:w-10" /> THE OLD WAY
@@ -57,7 +56,6 @@ export const HomePage: React.FC = () => {
                       </ul>
                   </div>
 
-                  {/* New Way */}
                   <div className="bg-[#00FFC0]/5 border-l-4 border-[#00FFC0] rounded-r-xl p-6 md:p-10 relative overflow-hidden backdrop-blur-sm">
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,255,192,0.1),transparent_70%)]"></div>
                       <h3 className="font-orbitron text-[#00FFC0] uppercase text-2xl md:text-3xl mb-8 flex items-center gap-3 relative z-10 tracking-widest font-bold text-glow">
@@ -81,7 +79,6 @@ export const HomePage: React.FC = () => {
                   </div>
               </div>
 
-              {/* Data Stream Demo */}
               <div className="max-w-4xl mx-auto">
                   <div className="mb-8 text-center">
                        <p className="inline-block text-[#00FFC0] font-mono text-xs md:text-sm uppercase tracking-[0.2em] animate-pulse-slow px-4 py-2 bg-[#00FFC0]/5 border rounded-full border-[#00FFC0]/20">
@@ -136,7 +133,6 @@ export const HomePage: React.FC = () => {
           </div>
       </section>
 
-      {/* === SECTION: ACTIVATION SEQUENCE === */}
       <section className="py-24 bg-[#0c0c0e] border-y border-[#333] relative">
            <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
 
@@ -171,7 +167,6 @@ export const HomePage: React.FC = () => {
 
       <FAQComponent />
 
-      {/* === FINAL CTA === */}
       <section className="py-24 md:py-32 bg-[#09090B] relative overflow-hidden border-t-2 border-[#00FFC0]">
           <div className="absolute inset-0 opacity-20 pointer-events-none bg-[linear-gradient(90deg,rgba(0,255,192,0.1)_1px,transparent_1px),linear-gradient(rgba(0,255,192,0.1)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]"></div>
           

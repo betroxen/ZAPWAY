@@ -1,15 +1,15 @@
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Icons } from '../components/icons';
 import { ProgressBar } from '../components/ProgressBar';
-import { AppContext } from '../context/AppContext';
-import { ToastContext } from '../context/ToastContext';
+import { useToast } from '../context/ToastContext';
 
 export const RewardsPage = () => {
-    const appContext = useContext(AppContext);
-    const { showToast } = useContext(ToastContext) || { showToast: () => {} };
+    const navigate = useNavigate();
+    const { showToast } = useToast();
     const [referralCopied, setReferralCopied] = useState(false);
 
     const handleCopyReferral = () => {
@@ -29,7 +29,6 @@ export const RewardsPage = () => {
     return (
         <div className="container mx-auto max-w-6xl p-4 py-10 md:p-12 page-fade-in">
             
-            {/* HEADER */}
             <div className="mb-10">
                 <div className="flex items-center gap-3 mb-2">
                     <Icons.Gift className="h-8 w-8 text-[#00FFC0] animate-pulse-slow" />
@@ -42,7 +41,6 @@ export const RewardsPage = () => {
                 </p>
             </div>
 
-            {/* 1. PAYOUT CIRCUIT STATUS (HUD) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <Card className="p-5 bg-[#0c0c0e] border-[#333] relative overflow-hidden group hover:border-[#00FFC0]/30">
                     <div className="absolute top-0 right-0 p-2 opacity-10"><Icons.Zap className="w-16 h-16 text-[#00FFC0]"/></div>
@@ -62,15 +60,13 @@ export const RewardsPage = () => {
                     <div className="absolute top-0 right-0 p-2 opacity-10"><Icons.Clock className="w-16 h-16 text-purple-500"/></div>
                     <p className="text-xs text-[#8d8c9e] font-heading uppercase tracking-widest mb-2">NEXT DISBURSEMENT</p>
                     <p className="font-mono text-3xl text-white font-bold tracking-tight">14D 06H 44M</p>
-                    <button onClick={() => appContext?.setCurrentPage('Command Console')} className="text-xs text-[#00FFC0] font-mono mt-2 flex items-center gap-1 hover:underline">
+                    <button onClick={() => navigate('/settings')} className="text-xs text-[#00FFC0] font-mono mt-2 flex items-center gap-1 hover:underline">
                         [UPDATE WALLET ADDRESS]
                     </button>
                 </Card>
             </div>
 
-            {/* 2. REWARD TIER & XP PROGRESSION */}
             <Card className="p-6 md:p-8 mb-12 bg-[#14131c] border-[#333] relative overflow-hidden">
-                {/* Background Grip Texture */}
                 <div className="absolute inset-0 opacity-5 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px'}}></div>
                 
                 <div className="relative z-10">
@@ -93,7 +89,6 @@ export const RewardsPage = () => {
                 </div>
             </Card>
 
-            {/* 3. REDEMPTION TERMINAL */}
             <div className="mb-12">
                 <h2 className="font-heading text-xl text-white mb-6 flex items-center gap-2 uppercase tracking-wider border-b border-[#333] pb-4">
                     <span className="text-[#00FFC0]">03 //</span> REDEMPTION TERMINAL (ASSET EXCHANGE)
@@ -118,7 +113,6 @@ export const RewardsPage = () => {
                 </div>
             </div>
 
-            {/* 4. REFERRAL PROTOCOL */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                 <div className="lg:col-span-2">
                      <Card className="p-6 md:p-8 bg-[#14131c] border-[#00FFC0]/20 h-full">
@@ -153,19 +147,17 @@ export const RewardsPage = () => {
                 </Card>
             </div>
 
-            {/* 5. FOOTER LINKS */}
             <div className="border-t border-[#333] pt-8 flex flex-wrap gap-4 justify-center md:justify-start">
                 <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]">
                     VIEW FULL SSP PAYOUT HISTORY LOG <Icons.ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
-                <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]" onClick={() => appContext?.setCurrentPage('Command Console')}>
+                <Button variant="ghost" className="text-[#8d8c9e] hover:text-white font-heading uppercase text-xs border border-[#333] bg-[#0c0c0e]" onClick={() => navigate('/settings')}>
                     ACCESS SECURITY CIRCUIT <Icons.ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
             </div>
             <p className="text-center md:text-left text-[10px] text-[#666] font-mono mt-4 uppercase">
                 All reward transactions are subject to AML/KYC screening under the Partner Vetting Policy.
             </p>
-
         </div>
     );
 };

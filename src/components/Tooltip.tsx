@@ -1,11 +1,7 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 
-interface TooltipProps {
-  children: ReactNode;
-  content: string;
-}
-
-export const Tooltip: React.FC<TooltipProps> = ({ children, content }) => {
+// FIX: Changed to React.FC to correctly handle children prop.
+export const Tooltip: React.FC<{ content: React.ReactNode }> = ({ children, content }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (

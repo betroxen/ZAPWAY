@@ -1,33 +1,14 @@
-import React, { createContext, useState, useContext, useEffect, useRef, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
 
-// Define the available sound keys for strict typing
-export type SoundType = 
-    | 'click_primary' 
-    | 'click_secondary'
-    | 'success' 
-    | 'error' 
-    | 'info'
-    | 'ui_open'
-    | 'ui_close'
-    | 'game_start'
-    | 'mine_safe'
-    | 'mine_boom'
-    | 'cashout'
-    | 'plinko_drop'
-    | 'plinko_hit'
-    | 'plinko_bucket';
-
-interface SoundContextType {
-    playSound: (type: SoundType, volume?: number) => void;
+export const SoundContext = createContext<{
+    playSound: (type: string, volume?: number) => void;
     isMuted: boolean;
     toggleMute: () => void;
     setMuted: (muted: boolean) => void;
-}
-
-export const SoundContext = createContext<SoundContextType | undefined>(undefined);
+} | undefined>(undefined);
 
 // V5.1 AUDIO ASSET MANIFEST
-const SOUND_MANIFEST: Record<SoundType, string> = {
+const SOUND_MANIFEST = {
     // UI Sounds
     click_primary: 'https://cdn.freesound.org/previews/676/676653_5674468-lq.mp3', // Crisp click
     click_secondary: 'https://cdn.freesound.org/previews/619/619757_11369773-lq.mp3', // Soft tick
@@ -47,8 +28,9 @@ const SOUND_MANIFEST: Record<SoundType, string> = {
     plinko_bucket: 'https://cdn.freesound.org/previews/171/171671_2437358-lq.mp3' // Bucket landing
 };
 
-export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isMuted, setIsMuted] = useState<boolean>(() => {
+// FIX: Changed to React.FC to correctly handle children prop.
+export const SoundProvider: React.FC = ({ children }) => {
+    const [isMuted, setIsMuted] = useState(() => {
         try {
             const saved = localStorage.getItem('zap_muted');
             return saved ? JSON.parse(saved) : false;
@@ -58,7 +40,7 @@ export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
 
     // Audio cache to prevent re-fetching
-    const audioCache = useRef<Partial<Record<SoundType, HTMLAudioElement>>>({});
+    const audioCache = useRef<{ [key: string]: HTMLAudioElement }>({});
 
     // Persist mute state
     useEffect(() => {
@@ -76,10 +58,10 @@ export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             silent.play().catch((e) => {});
 
             ['click_primary', 'success', 'error'].forEach(type => {
-                if (!audioCache.current[type as SoundType]) {
-                    const audio = new Audio(SOUND_MANIFEST[type as SoundType]);
+                if (!audioCache.current[type]) {
+                    const audio = new Audio(SOUND_MANIFEST[type]);
                     audio.preload = 'auto';
-                    audioCache.current[type as SoundType] = audio;
+                    audioCache.current[type] = audio;
                 }
             });
 
@@ -99,7 +81,7 @@ export const SoundProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         };
     }, []);
 
-    const playSound = (type: SoundType, volume: number = 0.5) => {
+    const playSound = (type: string, volume = 0.5) => {
         if (isMuted) return;
 
         try {

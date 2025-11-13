@@ -2,21 +2,14 @@ import React from 'react';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 
-interface CardData {
-    icon: React.FC<any>;
-    title: string;
-    description: string;
-}
-
-interface GenericPageProps {
-    title: string;
-    intro: string;
-    cards: CardData[];
-    ctaText?: string;
-    ctaAction?: () => void;
-}
-
-export const GenericPage: React.FC<GenericPageProps> = ({ title, intro, cards, ctaText, ctaAction }) => {
+// FIX: Made ctaText and ctaAction optional and added explicit prop types.
+export const GenericPage = ({ title, intro, cards, ctaText, ctaAction }: {
+  title: React.ReactNode;
+  intro: React.ReactNode;
+  cards: { icon: React.ElementType, title: string, description: string }[];
+  ctaText?: string;
+  ctaAction?: () => void;
+}) => {
   return (
     <div className="container mx-auto max-w-7xl p-4 py-10 md:p-12 page-fade-in">
       <h1 className="font-heading text-4xl font-bold text-white mb-4">{title}</h1>

@@ -1,23 +1,21 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
-interface UIContextType {
-  isAuthModalOpen: boolean;
-  authModalTab: 'login' | 'register';
-  openLogin: () => void;
-  openRegister: () => void;
-  closeAuthModal: () => void;
-  
-  isReviewModalOpen: boolean;
-  reviewCasinoId: string | null;
-  openReviewModal: (casinoId?: string) => void;
-  closeReviewModal: () => void;
-}
+const UIContext = createContext<{
+    isAuthModalOpen: boolean;
+    authModalTab: string;
+    openLogin: () => void;
+    openRegister: () => void;
+    closeAuthModal: () => void;
+    isReviewModalOpen: boolean;
+    reviewCasinoId: string | null;
+    openReviewModal: (casinoId?: string) => void;
+    closeReviewModal: () => void;
+} | undefined>(undefined);
 
-const UIContext = createContext<UIContextType | undefined>(undefined);
-
-export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+// FIX: Changed to React.FC to correctly handle children prop.
+export const UIProvider: React.FC = ({ children }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
+  const [authModalTab, setAuthModalTab] = useState('login');
   
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewCasinoId, setReviewCasinoId] = useState<string | null>(null);

@@ -1,19 +1,10 @@
+
 import React, { useState } from 'react';
 import { Icons } from './icons';
 import { Button } from './Button';
 import { Input } from './Input';
 
-interface ProvablyFairModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    gameName: string;
-    serverSeedHash: string;
-    clientSeed: string;
-    nonce: number;
-    onRotateSeeds: (newClientSeed: string) => void;
-}
-
-export const ProvablyFairModal: React.FC<ProvablyFairModalProps> = ({
+export const ProvablyFairModal = ({
     isOpen,
     onClose,
     gameName,

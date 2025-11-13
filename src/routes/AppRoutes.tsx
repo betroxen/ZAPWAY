@@ -1,6 +1,7 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout';
+import { useAuth } from '../auth/AuthContext';
 
 // Pages
 import { HomePage } from '../pages/HomePage';
@@ -36,20 +37,24 @@ import { StrategySandboxPage } from '../pages/StrategySandboxPage';
 import { MinesGamePage } from '../pages/MinesGamePage';
 import { PlinkoGamePage } from '../pages/PlinkoGamePage';
 import { ProvablyFairPage } from '../pages/ProvablyFairPage';
-import { useAuth } from '../auth/AuthContext';
+import { OurMissionPage } from '../pages/OurMissionPage';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// FIX: Changed to React.FC to correctly handle children prop.
+const ProtectedRoute: React.FC = ({ children }) => {
     const { user, loading } = useAuth();
-    if (loading) return null; // Or a loading spinner
-    return user ? <>{children}</> : <HomePage />;
+    if (loading) return null; 
+    return user ? <>{children}</> : <Navigate to="/" replace />;
 };
 
-
-export const AppRoutes: React.FC = () => (
+export const AppRoutes = () => (
   <Routes>
     <Route element={<MainLayout />}>
+        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
+        
+        {/* Static pages accessible to all */}
         <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/our-mission" element={<OurMissionPage />} />
         <Route path="/affiliate" element={<AffiliatePage />} />
         <Route path="/terms-of-service" element={<TermsOfServicePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
@@ -58,6 +63,7 @@ export const AppRoutes: React.FC = () => (
         <Route path="/review-methodology" element={<ReviewMethodologyPage />} />
         <Route path="/provably-fair" element={<ProvablyFairPage />} />
         <Route path="/responsible-gaming" element={<ResponsibleGamingPage />} />
+        <Route path="/faq" element={<FAQPage />} />
 
         {/* Protected Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
@@ -67,7 +73,6 @@ export const AppRoutes: React.FC = () => (
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
         <Route path="/support" element={<ProtectedRoute><SupportPage /></ProtectedRoute>} />
-        <Route path="/faq" element={<ProtectedRoute><FAQPage /></ProtectedRoute>} />
         <Route path="/bonus-calculator" element={<ProtectedRoute><BonusCalculatorPage /></ProtectedRoute>} />
         <Route path="/rtp-tracker" element={<ProtectedRoute><LiveRTPTrackerPage /></ProtectedRoute>} />
         <Route path="/missions" element={<ProtectedRoute><MissionsPage /></ProtectedRoute>} />
@@ -84,7 +89,7 @@ export const AppRoutes: React.FC = () => (
         <Route path="/strategy-sandbox/mines" element={<ProtectedRoute><MinesGamePage /></ProtectedRoute>} />
         <Route path="/strategy-sandbox/plinko" element={<ProtectedRoute><PlinkoGamePage /></ProtectedRoute>} />
         
-        <Route path="*" element={<div>Page not found</div>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
     </Route>
   </Routes>
 );

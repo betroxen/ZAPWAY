@@ -3,9 +3,9 @@ import React from 'react';
 import { ZapIcon } from './ZapIcon';
 import { Loader2 as LucideLoader } from 'lucide-react';
 
-const createIcon = (name: string) => React.forwardRef<SVGSVGElement, any>((props, ref) => <ZapIcon name={name} {...props} ref={ref} />);
+const createIcon = (name) => React.forwardRef((props, ref) => <ZapIcon name={name} {...props} ref={ref} />);
 
-const createRotatedIcon = (name: string, rotation: number) => React.forwardRef<SVGSVGElement, any>((props, ref) => (
+const createRotatedIcon = (name, rotation) => React.forwardRef((props, ref) => (
     <ZapIcon name={name} {...props} style={{ ...props.style, transform: `rotate(${rotation}deg)` }} ref={ref} />
 ));
 

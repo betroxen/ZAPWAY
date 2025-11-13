@@ -1,11 +1,7 @@
 import React from 'react';
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
-  noHover?: boolean;
-}
-
-export const Card: React.FC<CardProps> = ({ children, className, noHover = false, ...props }) => {
+// FIX: Added explicit props type with React.PropsWithChildren to solve widespread 'children' prop error.
+export const Card = ({ children, className, noHover = false, ...props }: React.PropsWithChildren<{ className?: string, noHover?: boolean, [x: string]: any }>) => {
   return (
     <div
       className={`bg-[#14131c] border border-[#333333] rounded-xl ${!noHover ? 'card-hover' : ''} ${className}`}

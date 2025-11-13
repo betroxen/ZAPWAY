@@ -1,48 +1,46 @@
-import React, { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Icons } from './icons';
+import { useAuth } from '../auth/AuthContext';
 
-interface MobileBottomNavProps {
-    onToggleMenu: () => void;
-}
+export const MobileBottomNav = ({ onToggleMenu }) => {
+    const { user } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const currentPath = location.pathname;
 
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onToggleMenu }) => {
-    const appContext = useContext(AppContext);
-    const currentPage = appContext?.currentPage;
-
-    // Only show if logged in to avoid cluttering public landing
-    if (!appContext?.isLoggedIn) return null;
+    if (!user) return null;
 
     const navItems = [
-        { id: 'Dashboard', label: 'HQ', icon: Icons.LayoutDashboard },
-        { id: 'Casino Directory', label: 'GRID', icon: Icons.Server },
-        { id: 'Missions', label: 'OPS', icon: Icons.Target },
-        { id: 'Messages', label: 'COMMS', icon: Icons.Mail },
-        { id: 'MENU_TRIGGER', label: 'MENU', icon: Icons.Menu },
+        { id: 'Dashboard', path: '/dashboard', label: 'HQ', icon: Icons.LayoutDashboard },
+        { id: 'Casino Directory', path: '/casinos', label: 'GRID', icon: Icons.Server },
+        { id: 'Missions', path: '/missions', label: 'OPS', icon: Icons.Target },
+        { id: 'Messages', path: '/messages', label: 'COMMS', icon: Icons.Mail },
+        { id: 'MENU_TRIGGER', path: '#', label: 'MENU', icon: Icons.Menu },
     ];
 
-    const handleNavClick = (id: string) => {
-        if (id === 'MENU_TRIGGER') {
+    const handleNavClick = (path) => {
+        if (path === '#') {
             onToggleMenu();
         } else {
-            appContext?.setCurrentPage(id);
+            navigate(path);
             window.scrollTo(0, 0);
         }
     };
 
     return (
         <div className="md:hidden fixed bottom-0 left-0 z-[60] w-full bg-[#0c0c0e]/95 backdrop-blur-xl border-t border-[#333] shadow-[0_-5px_30px_rgba(0,0,0,0.8)] pb-[env(safe-area-inset-bottom)]">
-            {/* Top Glow Accent Border */}
             <div className="absolute top-[-1px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00FFC0]/40 to-transparent"></div>
             
             <div className="flex items-center justify-around h-16 px-2">
                 {navItems.map((item) => {
-                    const isActive = currentPage === item.id;
+                    const isActive = currentPath === item.path;
                     
                     return (
                         <button
                             key={item.id}
-                            onClick={() => handleNavClick(item.id)}
+                            onClick={() => handleNavClick(item.path)}
                             className="flex flex-1 flex-col items-center justify-center h-full relative group active:scale-95 transition-transform"
                             aria-label={item.label}
                             aria-current={isActive ? 'page' : undefined}

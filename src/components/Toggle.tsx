@@ -1,14 +1,13 @@
 import React from 'react';
 import { useSound } from '../context/SoundContext';
 
-interface ToggleProps {
+// FIX: Made `description` prop optional and added explicit prop types.
+export const Toggle = ({ checked, onChange, label, description }: {
   checked: boolean;
   onChange: (checked: boolean) => void;
-  label?: React.ReactNode;
+  label: React.ReactNode;
   description?: React.ReactNode;
-}
-
-export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, label, description }) => {
+}) => {
   const { playSound } = useSound();
 
   const handleToggle = () => {

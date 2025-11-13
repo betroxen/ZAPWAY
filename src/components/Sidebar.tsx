@@ -1,70 +1,56 @@
-import React, { useContext, createContext } from 'react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Icons } from './icons';
-import { AppContext } from '../context/AppContext';
 import { sidebarNavItems } from '../constants/sidebar';
 import { Button } from './Button';
 import { Input } from './Input';
 import { ProgressBar } from './ProgressBar';
+import { useAuth } from '../auth/AuthContext';
 
-interface SidebarContextType {
-  isActive: boolean;
+// FIX: Changed to React.FC to correctly handle props like `key` and `children`.
+const SidebarLink: React.FC<{
+  path: string;
+  icon: React.ElementType;
   isCollapsed: boolean;
-}
-
-const SidebarContext = createContext<SidebarContextType>({
-  isActive: false,
-  isCollapsed: false,
-});
-
-// FIX: Changed 'href' prop to 'path' to match the data structure from sidebarNavItems.
-const SidebarLink: React.FC<{ path: string; icon: React.FC<any>; children: React.ReactNode; isMobile?: boolean; onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }> = ({ path, icon: Icon, children, isMobile, onClick, ...props }) => {
-  const { isActive, isCollapsed } = useContext(SidebarContext);
+  isMobile?: boolean;
+  onClick?: () => void;
+}> = ({ path, icon: Icon, children, isCollapsed, isMobile, onClick }) => {
   return (
-    <a
-      href={path}
+    <NavLink
+      to={path}
       onClick={onClick}
-      className={`group flex items-center gap-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] font-medium relative overflow-hidden
+      className={({ isActive }) => `group flex items-center gap-3 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] font-medium relative overflow-hidden
       ${isCollapsed ? 'justify-center px-2 py-3' : isMobile ? 'px-5 py-4 text-sm font-heading uppercase tracking-wider' : 'px-4 py-3 text-sm'}
       ${isActive 
         ? 'text-white bg-[#00FFC0]/5' 
         : 'text-[#8d8c9e] hover:bg-[#1A1A1A] hover:text-white'}`}
-      {...props}
     >
-       {/* Active Indicator */}
-       <div className={`absolute left-0 top-0 bottom-0 w-[3px] transition-all duration-300 ease-out ${isActive ? 'bg-[#00FFC0] shadow-[0_0_12px_#00FFC0]' : 'bg-transparent group-hover:bg-[#333]'}`} />
-
-      <Icon className={`${isMobile ? 'h-5 w-5' : 'h-4 w-4'} flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-[#00FFC0]' : 'group-hover:text-white'}`} aria-hidden="true" />
-      <span className={`whitespace-nowrap transition-opacity duration-300 ${isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 block'}`}>{children}</span>
-    </a>
+      {({ isActive }) => (
+        <>
+          <div className={`absolute left-0 top-0 bottom-0 w-[3px] transition-all duration-300 ease-out ${isActive ? 'bg-[#00FFC0] shadow-[0_0_12px_#00FFC0]' : 'bg-transparent group-hover:bg-[#333]'}`} />
+          <Icon className={`${isMobile ? 'h-5 w-5' : 'h-4 w-4'} flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-[#00FFC0]' : 'group-hover:text-white'}`} aria-hidden="true" />
+          <span className={`whitespace-nowrap transition-opacity duration-300 ${isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 block'}`}>{children}</span>
+        </>
+      )}
+    </NavLink>
   );
 };
 
-interface SidebarProps {
-  isCollapsed: boolean;
-  setIsCollapsed: (isCollapsed: boolean) => void;
-  isMobileOpen: boolean;
-  setIsMobileOpen: (isOpen: boolean) => void;
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen }) => {
-    const appContext = useContext(AppContext);
+export const Sidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen }) => {
+    const { user } = useAuth();
     
-    const handleNavClick = (e: React.MouseEvent, page: string) => {
-        e.preventDefault();
-        if (appContext?.setCurrentPage) {
-            appContext.setCurrentPage(page);
-        }
+    const handleNavClick = () => {
         setIsMobileOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    const groupLabels: { [key: string]: string } = {
+    const groupLabels = {
         COM: 'Comm Grid',
         CAS: 'Operations',
         SUP: 'Support',
         TOOLS: 'Utilities'
     };
 
-    // Mobile-specific Pilot Summary
     const MobilePilotSummary = () => (
         <div className="p-5 bg-[#14131c]/50 border-b border-[#333]">
              <div className="flex items-center gap-4 mb-4">
@@ -77,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                     <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-[#00FFC0] rounded-full border-4 border-[#0c0c0e]"></div>
                 </div>
                 <div>
-                    <div className="font-heading text-white uppercase text-sm tracking-wider">DegenGambler</div>
+                    <div className="font-heading text-white uppercase text-sm tracking-wider">{user?.username}</div>
                     <div className="text-[10px] font-mono text-[#00FFC0] flex items-center gap-2 mt-1">
                         <Icons.Shield className="h-3 w-3" /> LVL 42 OPERATOR
                     </div>
@@ -95,20 +81,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
 
     return (
     <>
-      {/* === MOBILE DRAWER === */}
-      {/* Backdrop */}
       <div 
         className={`fixed inset-0 top-16 z-[80] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ease-in-out ${isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
         onClick={() => setIsMobileOpen(false)} 
         aria-hidden="true" 
       />
 
-      {/* Drawer Container */}
       <div className={`fixed left-0 top-16 bottom-0 z-[90] w-[85vw] max-w-[300px] md:hidden transform transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
          <div className="h-full flex flex-col bg-[#0c0c0e] border-r border-[#333] shadow-2xl">
              
              <div className="shrink-0">
-                 {appContext?.isLoggedIn && <MobilePilotSummary />}
+                 {user && <MobilePilotSummary />}
              </div>
              
              <div className="flex-1 overflow-y-auto custom-scrollbar py-4">
@@ -122,17 +105,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                         )}
                         <div className="flex flex-col gap-px">
                         {group.items.map((item) => (
-                            <SidebarContext.Provider key={item.title} value={{ isActive: appContext?.currentPage === item.title, isCollapsed: false }}>
-                                <SidebarLink
-                                    // FIX: Changed 'href' prop to 'path'
-                                    path={item.path}
-                                    icon={item.icon}
-                                    isMobile={true}
-                                    onClick={(e) => handleNavClick(e, item.title)}
-                                >
-                                    {item.title}
-                                </SidebarLink>
-                            </SidebarContext.Provider>
+                            <SidebarLink
+                                key={item.title}
+                                path={item.path}
+                                icon={item.icon}
+                                isCollapsed={false}
+                                isMobile={true}
+                                onClick={handleNavClick}
+                            >
+                                {item.title}
+                            </SidebarLink>
                         ))}
                         </div>
                     </div>
@@ -152,7 +134,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
          </div>
       </div>
 
-      {/* === DESKTOP SIDEBAR === */}
       <aside 
         className={`hidden md:flex fixed left-0 top-16 bottom-0 flex-col flex-shrink-0 border-r border-[#333] bg-[#0c0c0e] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-40
         ${isCollapsed ? 'w-[72px]' : 'w-64'}`}
@@ -184,16 +165,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
                     )}
                     <div className="flex flex-col gap-[1px]">
                     {group.items.map((item) => (
-                        <SidebarContext.Provider key={item.title} value={{ isActive: appContext?.currentPage === item.title, isCollapsed }}>
                         <SidebarLink
-                            // FIX: Changed 'href' prop to 'path'
+                            key={item.title}
                             path={item.path}
                             icon={item.icon}
-                            onClick={(e) => handleNavClick(e, item.title)}
+                            isCollapsed={isCollapsed}
                         >
                             {item.title}
                         </SidebarLink>
-                        </SidebarContext.Provider>
                     ))}
                     </div>
                 </div>

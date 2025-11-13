@@ -1,24 +1,25 @@
-import React, { useState, useContext } from 'react';
+
+import React, { useState } from 'react';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Icons } from '../components/icons';
-import { ToastContext } from '../context/ToastContext';
+import { useToast } from '../context/ToastContext';
 
 export const AffiliatePage = () => {
-    const { showToast } = useContext(ToastContext) || { showToast: () => {} };
-    const [partnerType, setPartnerType] = useState<'operator' | 'creator'>('operator');
+    const { showToast } = useToast();
+    const [partnerType, setPartnerType] = useState('operator');
     const [philosophy, setPhilosophy] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setTimeout(() => {
             setIsSubmitting(false);
             showToast("APPLICATION TRANSMITTED. Entered Vetting Queue.", "success");
             setPhilosophy('');
-            (e.target as HTMLFormElement).reset();
+            e.currentTarget.reset();
         }, 2000);
     };
 

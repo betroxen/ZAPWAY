@@ -1,24 +1,17 @@
+
 import React, { forwardRef } from 'react';
 import { useSound } from '../context/SoundContext';
 import { Icons } from './icons';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
-  loading?: boolean;
-  disableSound?: boolean;
-}
-
 // V4.0 Tactical Spinner - Segmented & Adaptive
-const TacticalSpinner = ({ className }: { className?: string }) => (
+const TacticalSpinner = ({ className }) => (
   <svg className={`animate-spin ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
     <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="4 4" />
     <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
   </svg>
 );
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant = 'primary', size = 'default', children, loading = false, disableSound = false, onClick, ...props }, ref) => {
-  // Integrate Sound Engine
+export const Button = forwardRef(({ className, variant = 'primary', size = 'default', children, loading = false, disableSound = false, onClick, ...props }, ref) => {
   const { playSound } = useSound();
 
   const variants = {
@@ -35,14 +28,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, v
     icon: 'h-10 w-10',
   };
   
-  // V5.0 Kinetic Feedback: active:scale-[0.98] ensures tactile press response
   const baseClasses = 'relative inline-flex items-center justify-center rounded-[4px] font-heading uppercase tracking-wider transition-all duration-150 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] overflow-hidden';
  
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (e) => {
       if (!disableSound && !loading && !props.disabled) {
-          // Differentiate sound based on importance
           const soundType = variant === 'primary' ? 'click_primary' : 'click_secondary';
-          // Slightly lower volume for secondary/ghost actions
           const volume = variant === 'primary' ? 0.4 : 0.25; 
           playSound(soundType, volume);
       }

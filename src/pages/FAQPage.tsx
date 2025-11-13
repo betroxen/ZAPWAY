@@ -1,12 +1,11 @@
-
-import React, { useContext } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../components/Accordion';
 import { Button } from '../components/Button';
-import { AppContext } from '../context/AppContext';
 import { Icons } from '../components/icons';
 
 export const FAQPage = () => {
-  const appContext = useContext(AppContext);
+  const navigate = useNavigate();
   
   const INTEL_ITEMS = [
     {
@@ -64,7 +63,6 @@ export const FAQPage = () => {
   return (
     <div className="container mx-auto max-w-5xl p-4 py-10 md:p-12 page-fade-in">
         
-        {/* HEADER */}
         <div className="mb-12">
             <div className="flex items-center gap-3 mb-2">
                 <Icons.BookOpen className="h-8 w-8 text-[#00FFC0] animate-pulse-slow" />
@@ -77,14 +75,12 @@ export const FAQPage = () => {
             </p>
         </div>
 
-        {/* INTRO BLURB */}
         <div className="bg-[#0c0c0e] border-l-4 border-[#00FFC0] p-6 mb-10 rounded-r-lg">
             <p className="text-lg text-white leading-relaxed font-medium">
                 Straight answers. No fluff. Everything you need to know about the ZAP revolution.
             </p>
         </div>
 
-        {/* ACCORDION CONTAINER */}
         <div className="bg-[#14131c] rounded-xl border border-[#333] overflow-hidden p-2 md:p-4">
             <Accordion multiple={false} defaultOpen={["item-0"]}>
                 {INTEL_ITEMS.map((item, index) => (
@@ -111,7 +107,6 @@ export const FAQPage = () => {
             </Accordion>
         </div>
 
-        {/* SUPPORT ACTIVATION TERMINAL */}
         <div className="mt-12 p-8 bg-[#0c0c0e] border border-[#00FFC0]/30 rounded-xl relative overflow-hidden text-center">
             <div className="relative z-10">
                 <Icons.MessageSquare className="h-12 w-12 text-[#00FFC0] mx-auto mb-4" />
@@ -121,16 +116,14 @@ export const FAQPage = () => {
                 </p>
                 <Button 
                     size="lg" 
-                    onClick={() => appContext?.setCurrentPage('Support')} 
+                    onClick={() => navigate('/support')} 
                     className="shadow-[0_0_30px_rgba(0,255,192,0.3)] font-heading uppercase tracking-widest px-8"
                 >
                     ACTIVATE SUPPORT LINE →
                 </Button>
             </div>
-            {/* Background Grid */}
             <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(rgba(0,255,192,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,192,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
         </div>
-
     </div>
   );
 };

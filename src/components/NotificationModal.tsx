@@ -3,14 +3,7 @@ import React, { useEffect } from 'react';
 import { Icons } from './icons';
 import { Button } from './Button';
 
-interface NotificationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  message: string;
-}
-
-export const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, title, message }) => {
+export const NotificationModal = ({ isOpen, onClose, title, message }) => {
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => {

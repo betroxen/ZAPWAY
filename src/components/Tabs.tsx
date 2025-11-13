@@ -1,11 +1,7 @@
+
 import React, { useState } from 'react';
 
-interface TabsProps {
-    tabs: string[];
-    children: React.ReactNode[];
-}
-
-export const Tabs: React.FC<TabsProps> = ({ tabs, children }) => {
+export const Tabs = ({ tabs, children }) => {
     const [activeTab, setActiveTab] = useState(0);
 
     return (

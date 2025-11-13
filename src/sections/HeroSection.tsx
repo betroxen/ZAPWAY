@@ -1,9 +1,10 @@
+
 import React from 'react';
-import { Button } from '../components/common/Button';
+import { Button } from '../components/Button';
 import { useAuth } from '../auth/AuthContext';
 import { useUI } from '../context/UIContext';
 
-export const HeroSection: React.FC = () => {
+export const HeroSection = () => {
   const { user } = useAuth();
   const { openRegister } = useUI();
 

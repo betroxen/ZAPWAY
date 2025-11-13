@@ -1,22 +1,12 @@
-
-import React, { useState, useContext, createContext, ReactNode } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import { Icons } from './icons';
 
-interface AccordionContextType {
-    openItems: string[];
-    toggleItem: (value: string) => void;
-}
+// FIX: Added explicit types for context
+const AccordionContext = createContext<{ openItems: string[], toggleItem: (value: string) => void } | undefined>(undefined);
 
-const AccordionContext = createContext<AccordionContextType | undefined>(undefined);
-
-interface AccordionProps {
-    children: ReactNode;
-    multiple?: boolean;
-    defaultOpen?: string[];
-}
-
-export const Accordion: React.FC<AccordionProps> = ({ children, multiple = false, defaultOpen = [] }) => {
-  const [openItems, setOpenItems] = useState<string[]>(defaultOpen);
+// FIX: Changed to React.FC to correctly handle children and other React props.
+export const Accordion: React.FC<{ multiple?: boolean; defaultOpen?: string[] }> = ({ children, multiple = false, defaultOpen = [] }) => {
+  const [openItems, setOpenItems] = useState(defaultOpen);
   const toggleItem = (value: string) => {
     if (multiple) {
       setOpenItems((current) =>
@@ -35,28 +25,18 @@ export const Accordion: React.FC<AccordionProps> = ({ children, multiple = false
   );
 };
 
-interface AccordionItemContextType {
-    value: string;
-}
+// FIX: Added explicit types for context
+const AccordionItemContext = createContext<{ value: string } | undefined>(undefined);
 
-const AccordionItemContext = createContext<AccordionItemContextType | undefined>(undefined);
-
-interface AccordionItemProps {
-    value: string;
-    children: ReactNode;
-}
-
-export const AccordionItem: React.FC<AccordionItemProps> = ({ value, children }) => (
+// FIX: Changed to React.FC to correctly handle `key` and `children` props.
+export const AccordionItem: React.FC<{ value: string }> = ({ value, children }) => (
   <AccordionItemContext.Provider value={{ value }}>
     <div className="border-b border-[#3a3846] last:border-b-0">{children}</div>
   </AccordionItemContext.Provider>
 );
 
-interface AccordionTriggerProps {
-    children: ReactNode;
-}
-
-export const AccordionTrigger: React.FC<AccordionTriggerProps> = ({ children }) => {
+// FIX: Changed to React.FC to correctly handle children.
+export const AccordionTrigger: React.FC = ({ children }) => {
   const itemContext = useContext(AccordionItemContext);
   if (!itemContext) {
     throw new Error("AccordionTrigger must be used within an AccordionItem");
@@ -79,11 +59,8 @@ export const AccordionTrigger: React.FC<AccordionTriggerProps> = ({ children }) 
   );
 };
 
-interface AccordionContentProps {
-    children: ReactNode;
-}
-
-export const AccordionContent: React.FC<AccordionContentProps> = ({ children }) => {
+// FIX: Changed to React.FC to correctly handle children.
+export const AccordionContent: React.FC = ({ children }) => {
   const itemContext = useContext(AccordionItemContext);
   if (!itemContext) {
     throw new Error("AccordionContent must be used within an AccordionItem");
